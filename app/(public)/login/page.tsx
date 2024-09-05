@@ -9,7 +9,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import LoginImage from '../../../assets/images/Login image.png'
@@ -19,6 +18,7 @@ import { LoginSchema } from '@/utils/login-schema'
 // import { createSupabaseBrowser } from '@/lib/supabase/client'
 // import { useTransition } from 'react'
 import { z } from 'zod'
+import { Input } from '@/components/Input/Input'
 
 export default function LoginPage() {
   // const [isPending, startTransition] = useTransition()
@@ -106,6 +106,7 @@ export default function LoginPage() {
                         className="h-8 text-zinc-700"
                         placeholder="*********"
                         type="password"
+                        showPasswordTips={true}
                         {...field}
                       />
                     </FormControl>
