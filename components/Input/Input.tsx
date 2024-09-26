@@ -56,9 +56,15 @@ export const Input = ({
                 onClick={() => setShowPassword((prev) => !prev)}
               >
                 {showPassword ? (
-                  <FaRegEye className="h-4 w-4" aria-hidden="true" />
+                  <FaRegEye
+                    className="h-4 w-4 text-zinc-300 opacity-40"
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <FaRegEyeSlash className="h-4 w-4" aria-hidden="true" />
+                  <FaRegEyeSlash
+                    className="h-4 w-4 text-zinc-300 opacity-40"
+                    aria-hidden="true"
+                  />
                 )}
                 <span className="sr-only">
                   {showPassword ? 'Hide password' : 'Show password'}
@@ -66,7 +72,7 @@ export const Input = ({
               </Button>
             </div>
             {showPasswordTips && (
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center mt-4">
                 <p className="text-sm text-zinc-300 opacity-5">
                   * The password must be at least 8 characters long
                 </p>
