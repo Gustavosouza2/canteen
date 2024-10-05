@@ -7,5 +7,5 @@ export const LoginSchema = z.object({
   email: z
     .string()
     .regex(emailRegex, { message: 'Please enter a valid email' }),
-  password: z.string().min(8, { message: 'Password is too short' }),
+  password: z.string().min(6, { message: 'Password is too short' }),
 })
