@@ -1,9 +1,9 @@
 'use client'
 
-// import { createSupabaseBrowser } from '@/lib/supabase/client'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-// import { useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import Image from 'next/image'
 import { z } from 'zod'
 import {
@@ -16,12 +16,20 @@ import {
 } from '@/components/ui/form'
 
 import LoginImage from '../../../assets/images/LoginImg.jpg'
+import { Spinner } from '@/components/Spinner/Spinner'
 import { LoginSchema } from '@/utils/login-schema'
 import { Input } from '@/components/Input/Input'
 import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
+import { useToast } from '@/hooks/use-toast'
 
 export default function LoginPage() {
-  // const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const supabase = createClientComponentClient()
+  const router = useRouter()
+  const { toast } = useToast()
 
   const form = useForm({
     defaultValues: { email: '', password: '' },
@@ -34,22 +42,26 @@ export default function LoginPage() {
   } = form
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    // const supabase = createSupabaseBrowser()
-    // if (!isPending) {
-    //   startTransition(async () => {
-    //     const { error } = await supabase.auth.signIn({
-    //       email: data.email,
-    //       password: data.password,
-    //     })
-    //     if (error) {
-    //       alert('Failed to sign in')
-    //     } else {
-    //       alert('Logged in successfully')
-    //     }
-    //   })
-    // }
-
-    console.log(data.email)
+    setIsLoading(true)
+    if (!isPending) {
+      startTransition(async () => {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        })
+        router.push('/home')
+        setIsLoading(false)
+        if (error) {
+          toast({
+            title: 'Uh oh! Something went wrong.',
+            description: 'There was a problem with your request.',
+            variant: 'default',
+          })
+        } else {
+          router.refresh()
+        }
+      })
+    }
   }
   return (
     <>
@@ -140,7 +152,7 @@ export default function LoginPage() {
                 className="md:w-2/3 w-50 bg-gradient-to-r from-[#434343] to-[#1d1d20] hover:bg-gray-900"
                 disabled={!isValid}
               >
-                Sign In
+                {isLoading ? <Spinner className="" /> : 'Sign In'}
               </Button>
             </form>
           </Form>
