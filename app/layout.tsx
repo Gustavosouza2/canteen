@@ -1,6 +1,7 @@
 import { Poppins } from 'next/font/google'
 import localFont from 'next/font/local'
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
 
 import './globals.css'
 
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${circular.variable}`}>
+        <Toaster />
         {children}
       </body>
     </html>

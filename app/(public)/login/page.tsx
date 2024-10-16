@@ -3,7 +3,7 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { z } from 'zod'
 import {
@@ -20,16 +20,12 @@ import { Spinner } from '@/components/Spinner/Spinner'
 import { LoginSchema } from '@/utils/login-schema'
 import { Input } from '@/components/Input/Input'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 export default function LoginPage() {
-  const [isPending, startTransition] = useTransition()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const supabase = createClientComponentClient()
-  const router = useRouter()
-  const { toast } = useToast()
 
   const form = useForm({
     defaultValues: { email: '', password: '' },
@@ -38,66 +34,66 @@ export default function LoginPage() {
   })
 
   const {
+    handleSubmit,
     formState: { isValid },
   } = form
 
-  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     setIsLoading(true)
-    if (!isPending) {
-      startTransition(async () => {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: data.email,
-          password: data.password,
-        })
-        router.push('/home')
-        setIsLoading(false)
-        if (error) {
-          toast({
-            title: 'Uh oh! Something went wrong.',
-            description: 'There was a problem with your request.',
-            variant: 'default',
-          })
-        } else {
-          router.refresh()
-        }
+    try {
+      const response = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       })
+
+      return response.data
+    } catch (error) {
+      toast.message('Something went wrong', {
+        description:
+          'Incorrect email or password! Please enter valid credentials',
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
+
   return (
     <>
       <main className=" bg-[#121214] h-screen w-screen flex items-center justify-center p-5">
         <div className="grid w-full h-full  grid-cols-1  box-anim md:grid-cols-2 rounded-md ">
           <div className="relative hidden md:block rounded-md p-32">
             <Image
-              className="rounded-lg w-full h-full object-cover "
+              className="rounded-lg w-full h-full object-cover"
               src={LoginImage}
               quality={100}
               fill={true}
               alt="login"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#121214] to-transparent opacity-85 rounded-s-md"></div>
-            <h1 className="absolute text-zinc-800 text-6xl font-bold top-56 left-40 tracking-wider">
-              DashTrack
-            </h1>
 
-            <p className="absolute text-zinc-800 text-1xl font-normal bottom-24 left-16 ">
-              Your real-time control technology that transforms data into
-              insights!
-            </p>
+            <div className="absolute flex justify-center flex-col items-center gap-56 top-72">
+              <h1 className=" text-zinc-800 text-6xl font-bold tracking-wider animate-fade-up animate-once animate-duration-[1400ms]">
+                DashTrack
+              </h1>
+              <p className=" text-zinc-800 text-1xl font-normal animate-fade-up animate-once animate-duration-[1400ms]">
+                Your real-time control technology that transforms data into
+                insights!
+              </p>
+            </div>
           </div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-6  bg-[#121214] flex flex-col items-center justify-center w-full rounded-e-md md:p-32 p-11"
+              className="space-y-6  bg-[#121214] flex flex-col items-center justify-center max-w-max rounded-e-md md:p-32 p-11"
             >
-              <div className="flex flex-col items-start justify-items-start">
-                <h1 className="md:text-4xl text-xl font-semibold text-zinc-300 mb-2 flex items-center">
+              <div className="flex flex-col items-start justify-items-start justify-between">
+                <h1 className="md:text-4xl text-xl  font-semibold text-zinc-300 mb-2 flex items-center w-max animate-fade animate-once animate-duration-1000">
                   Login to your
-                  <p className="bg-gradient-to-r from-[#434343] to-[#5d5d5f] bg-clip-text text-transparent md:text-4xl text-xl ml-2">
+                  <p className="bg-gradient-to-r from-[#434343] to-[#5d5d5f] bg-clip-text text-transparent md:text-4xl text-xl ml-2 animate-fade animate-once animate-duration-1000">
                     Dashboard
                   </p>
                 </h1>
-                <p className="text-md text-zinc-300 font-extralight opacity-100 ">
+                <p className="text-md text-zinc-300 font-extralight opacity-100 animate-fade animate-once animate-duration-1000">
                   See what is going on with your business
                 </p>
               </div>
@@ -149,8 +145,9 @@ export default function LoginPage() {
                 )}
               />
               <Button
-                className="md:w-2/3 w-50 bg-gradient-to-r from-[#434343] to-[#1d1d20] hover:bg-gray-900"
+                className="w-full h-11 bg-gradient-to-r from-[#434343] to-[#1d1d20] hover:bg-gray-900"
                 disabled={!isValid}
+                onClick={handleSubmit(onSubmit)}
               >
                 {isLoading ? <Spinner className="" /> : 'Sign In'}
               </Button>
