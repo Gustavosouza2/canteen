@@ -1,4 +1,5 @@
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
+import { UseFormRegister } from 'react-hook-form'
 import { useState } from 'react'
 
 import { Input as InputShad, type InputProps } from '@/components/ui/input'
@@ -6,6 +7,7 @@ import { Button } from '../ui/button'
 
 type InputProperty = InputProps & {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  register: UseFormRegister<any>
   type: 'email' | 'password'
   showPasswordTips?: boolean
   placeholder: string
@@ -15,6 +17,7 @@ export const Input = ({
   showPasswordTips,
   placeholder,
   className,
+  register,
   onChange,
   type,
   ...props
@@ -30,6 +33,7 @@ export const Input = ({
               <InputShad
                 {...props}
                 type={'text'}
+                {...register}
                 onChange={onChange}
                 className={className}
                 placeholder={placeholder}
