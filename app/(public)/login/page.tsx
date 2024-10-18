@@ -2,8 +2,10 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useTransition } from 'react'
 import Image from 'next/image'
 import { z } from 'zod'
 import {
@@ -20,12 +22,13 @@ import { Spinner } from '@/components/Spinner/Spinner'
 import { LoginSchema } from '@/utils/login-schema'
 import { Input } from '@/components/Input/Input'
 import { Button } from '@/components/ui/button'
-import { toast } from 'sonner'
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isPending, startTransition] = useTransition()
 
   const supabase = createClientComponentClient()
+  const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm({
     defaultValues: { email: '', password: '' },
@@ -34,26 +37,29 @@ export default function LoginPage() {
   })
 
   const {
-    handleSubmit,
+    register,
     formState: { isValid },
   } = form
 
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
-    setIsLoading(true)
-    try {
-      const response = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      })
+    if (!isPending) {
+      startTransition(async () => {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        })
 
-      return response.data
-    } catch (error) {
-      toast.message('Something went wrong', {
-        description:
-          'Incorrect email or password! Please enter valid credentials',
+        if (error) {
+          toast({
+            title: 'Login Failed',
+            description:
+              'The email or password you entered is incorrect. Please check your credentials and try again',
+            variant: 'default',
+          })
+        } else {
+          router.push('/dashboard')
+        }
       })
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -112,6 +118,7 @@ export default function LoginPage() {
                       <Input
                         className="h-10 text-zinc-300 border border-transparent focus:border-zinc-600 focus:outline-none bg-zinc-900"
                         placeholder="example@gmail.com"
+                        register={register}
                         type="email"
                         {...field}
                       />
@@ -136,6 +143,7 @@ export default function LoginPage() {
                       <Input
                         className="h-10 text-zinc-300 border border-transparent focus:border-zinc-600 focus:outline-none bg-zinc-900"
                         placeholder="*********"
+                        register={register}
                         type="password"
                         {...field}
                       />
@@ -147,9 +155,9 @@ export default function LoginPage() {
               <Button
                 className="w-full h-11 bg-gradient-to-r from-[#434343] to-[#1d1d20] hover:bg-gray-900"
                 disabled={!isValid}
-                onClick={handleSubmit(onSubmit)}
+                type="submit"
               >
-                {isLoading ? <Spinner className="" /> : 'Sign In'}
+                {isPending ? <Spinner className="" /> : 'Sign In'}
               </Button>
             </form>
           </Form>
