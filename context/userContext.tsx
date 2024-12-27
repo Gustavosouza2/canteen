@@ -83,7 +83,7 @@ export const useUser = () => {
     throw new Error('useUser must be used within a UserContextProvider')
   }
   return {
-    userName: context?.user?.id ?? null,
+    id: context?.user?.id ?? null,
     token: context?.token ?? null,
     email: context.user?.email ?? null,
   }
