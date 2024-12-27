@@ -1,44 +1,26 @@
 'use client'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { ReactNode, useState, useEffect } from 'react'
+import { SidebarProvider } from '@/components/ui/sidebar'
+import { ReactNode } from 'react'
 
 import { useMobile } from '@/hooks/use-custom-mobile'
+import { HeaderDashboard } from './Header'
+import { FooterDashboard } from './Footer'
 import { NavItems } from './NavItem'
 import { Sidebar } from './SideBar'
 
 export const DashBoardLayout = ({ children }: { children: ReactNode }) => {
-  const [isMounted, setIsMounted] = useState(false)
   const isMobile = useMobile()
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) {
-    return null
-  }
-
   return (
-    <div>
-      {isMobile && (
-        <>
-          <NavItems />
-        </>
-      )}
-      <SidebarProvider>
-        <div>
-          {!isMobile && (
-            <>
-              <Sidebar />
+    <div className="flex flex-col min-h-screen absolute">
+      {isMobile && <NavItems />}
+      <HeaderDashboard />
 
-              <>
-                <SidebarTrigger className="bg-transparent text-[#fafafa70] hover:bg-[#2b2b2c] hover:text-[#fafafa70]" />
-                {children}
-              </>
-            </>
-          )}
-        </div>
+      <SidebarProvider>
+        <Sidebar />
+        <main>{children}</main>
       </SidebarProvider>
+      <FooterDashboard />
     </div>
   )
 }

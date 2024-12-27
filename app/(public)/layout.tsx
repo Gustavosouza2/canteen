@@ -1,5 +1,7 @@
-import { Toaster } from '@/components/ui/toaster'
 import '../globals.css'
+
+import { LoginLayoutComponent } from '@/components/layout/public'
+import { Toaster } from '@/components/ui/toaster'
 
 export const metadata = {
   title: 'Login',
@@ -13,10 +15,10 @@ export default function LoginLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <LoginLayoutComponent>
         {children}
         <Toaster />
-      </body>
+      </LoginLayoutComponent>
     </html>
   )
 }

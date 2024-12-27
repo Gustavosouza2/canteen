@@ -3,7 +3,6 @@ import {
   Sidebar as SideBarShad,
   SidebarGroupContent,
   SidebarMenuButton,
-  SidebarGroupLabel,
   SidebarMenuItem,
   SidebarContent,
   SidebarGroup,
@@ -35,21 +34,22 @@ const items: NavItem[] = [
 
 export const Sidebar = () => {
   return (
-    <SideBarShad className="border-[#a1a1aa28] bg-[#1E1E20]">
+    <SideBarShad className="border-[#a1a1aa28] bg-[#1E1E20] w-40 ">
       <SidebarContent className="bg-[#1E1E20]">
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className="text-[#fafafa70] hover:bg-[#1E1E20] hover:text-[#373738] bg-transparent"
+                    className="text-[#fafafaaf] hover:bg-[#1E1E20] hover:text-[#373738] bg-transparent"
                   >
                     <a href={item.href}>
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span className="font-mono font-semibold ">
+                        {item.title}
+                      </span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

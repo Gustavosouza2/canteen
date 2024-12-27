@@ -4,12 +4,11 @@ import { useUser } from '../../../../context/userContext'
 import { Card } from '@/components/Card/Card'
 
 export default function Home() {
-  const { email, token, userName } = useUser()
+  const { email, token } = useUser()
 
   console.log({
     email,
     token,
-    userName,
   })
 
   return (

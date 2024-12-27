@@ -92,7 +92,7 @@ export default function LoginPage() {
                 <FormItem className="w-full">
                   <FormLabel
                     htmlFor="email"
-                    className="text-[#A1A1AA] font-normal tracking-wider font-sans"
+                    className="text-[#A1A1AA] font-sans tracking-wider font-semibold"
                   >
                     Email
                   </FormLabel>
@@ -117,7 +117,7 @@ export default function LoginPage() {
                 <FormItem className="w-full">
                   <FormLabel
                     htmlFor="password"
-                    className="text-[#A1A1AA] font-normal tracking-wider font-sans"
+                    className="text-[#A1A1AA] font-sans tracking-wider font-semibold"
                   >
                     Password
                   </FormLabel>
