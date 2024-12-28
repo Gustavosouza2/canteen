@@ -1,5 +1,5 @@
 import { Button as ButtonShad } from '@/components/ui/button'
-import { Spinner } from '../Spinner/Spinner'
+import { Spinner } from '../spinner/Spinner'
 
 type ButtonProps = {
   variant?: 'primary' | 'secondary'

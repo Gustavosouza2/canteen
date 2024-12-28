@@ -1,6 +1,6 @@
 import '../globals.css'
 
-import { LoginLayoutComponent } from '@/components/layout/public'
+import { LoginLayoutComponent } from '@/app/(auth)/layout/public'
 import { Toaster } from '@/components/ui/toaster'
 
 export const metadata = {
@@ -14,11 +14,11 @@ export default function LoginLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <>
       <LoginLayoutComponent>
         {children}
         <Toaster />
       </LoginLayoutComponent>
-    </html>
+    </>
   )
 }

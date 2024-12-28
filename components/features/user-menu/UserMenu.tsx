@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '../ui/button'
+import { Button } from '../../ui/button'
 
 interface UserMenuProps {
   name: string | null

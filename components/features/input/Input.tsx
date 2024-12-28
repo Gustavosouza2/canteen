@@ -3,7 +3,7 @@ import { UseFormRegister } from 'react-hook-form'
 import { useState } from 'react'
 
 import { Input as InputShad, type InputProps } from '@/components/ui/input'
-import { Button } from '../ui/button'
+import { Button } from '../../ui/button'
 
 type InputProperty = InputProps & {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -31,12 +31,12 @@ export const Input = ({
           <>
             <div className="flex items-center justify-center">
               <InputShad
-                {...props}
-                type={'text'}
-                {...register}
-                onChange={onChange}
-                className={className}
                 placeholder={placeholder}
+                className={className}
+                onChange={onChange}
+                {...register}
+                type="text"
+                {...props}
               />
             </div>
           </>
@@ -46,18 +46,18 @@ export const Input = ({
           <>
             <div className="flex items-center justify-center">
               <InputShad
-                placeholder={placeholder}
                 type={showPassword ? 'text' : 'password'}
-                onChange={onChange}
+                placeholder={placeholder}
                 className={className}
+                onChange={onChange}
                 {...props}
               />
               <Button
-                type="button"
-                variant="ghost"
-                size="sm"
                 className="absolute right-0 top--0  h-full px-3 py-2 hover:bg-transparent"
                 onClick={() => setShowPassword((prev) => !prev)}
+                variant="ghost"
+                type="button"
+                size="sm"
               >
                 {showPassword ? (
                   <FaRegEye

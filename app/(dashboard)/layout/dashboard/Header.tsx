@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { UserMenu } from '@/components/UserMenu/UserMenu'
+import { UserMenu } from '@/components/features/user-menu/UserMenu'
 
 import { useUser } from '@/context/userContext'
 

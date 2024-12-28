@@ -1,7 +1,7 @@
 'use client'
 
 import { useUser } from '../../../../context/userContext'
-import { Card } from '@/components/Card/Card'
+import { Card } from '@/components/features/card/Card'
 
 export default function Home() {
   const { email, token } = useUser()

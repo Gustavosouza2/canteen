@@ -1,4 +1,4 @@
-import { DashBoardLayout } from '@/components/layout/dashboard'
+import { DashBoardLayout } from '@/app/(dashboard)/layout/dashboard'
 import type { Metadata } from 'next'
 import { ReactNode } from 'react'
 

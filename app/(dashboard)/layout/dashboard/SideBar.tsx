@@ -9,7 +9,7 @@ import {
   SidebarMenu,
 } from '@/components/ui/sidebar'
 
-import { CustomerIcon, HomeIcon } from '@/assets/icons'
+import { CustomerIcon, HomeIcon } from '@/components/icons'
 
 interface NavItem {
   disabled?: boolean
