@@ -1,14 +1,18 @@
 'use client'
 
-import { useUser } from '../../../../context/userContext'
+import { useUsersQuery } from '@/hooks/custom/use-users'
+import { useUserContext } from '../../../../context/userContext'
 import { Card } from '@/components/features/card/Card'
 
 export default function Home() {
-  const { email, token } = useUser()
+  const { email, token } = useUserContext()
+
+  const { data } = useUsersQuery()
 
   console.log({
     email,
     token,
+    data,
   })
 
   return (

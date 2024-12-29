@@ -1,10 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { UserMenu } from '@/components/features/user-menu/UserMenu'
 
-import { useUser } from '@/context/userContext'
+import { useUserContext } from '@/context/userContext'
 
 export const HeaderDashboard = () => {
-  const { email } = useUser()
+  const { email } = useUserContext()
 
   const rawUserName = email?.slice(0, 7)
 
