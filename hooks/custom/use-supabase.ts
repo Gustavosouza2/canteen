@@ -1,4 +1,4 @@
-import { getSupabaseBrowserClient } from '../../services/lib/supabase'
+import { getSupabaseBrowserClient } from '../../lib/supabase'
 import { useMemo } from 'react'
 
 export const useSupabase = () => {
