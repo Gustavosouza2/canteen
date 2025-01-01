@@ -1,4 +1,4 @@
-import { cn } from '@/services/lib/utils'
+import { cn } from '@/lib/utils'
 
 export const Spinner = ({ className }: { className: string }) => {
   return (
