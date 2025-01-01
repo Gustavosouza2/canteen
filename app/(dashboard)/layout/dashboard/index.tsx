@@ -12,13 +12,13 @@ export const DashBoardLayout = ({ children }: { children: ReactNode }) => {
   const isMobile = useMobile()
 
   return (
-    <div className="flex flex-col min-h-screen absolute">
+    <div className="h-screen">
       {isMobile && <NavItems />}
       <HeaderDashboard />
 
       <SidebarProvider>
         <Sidebar />
-        <main>{children}</main>
+        {children}
       </SidebarProvider>
       <FooterDashboard />
     </div>
