@@ -18,7 +18,7 @@ export const DashBoardLayout = ({ children }: { children: ReactNode }) => {
 
       <SidebarProvider>
         <Sidebar />
-        {children}
+        <div className="w-full">{children}</div>
       </SidebarProvider>
       <FooterDashboard />
     </div>

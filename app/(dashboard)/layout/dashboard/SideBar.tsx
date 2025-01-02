@@ -22,12 +22,12 @@ interface NavItem {
 const items: NavItem[] = [
   {
     title: 'Home',
-    href: '/home',
+    href: '/dashboard/home',
     icon: HomeIcon,
   },
   {
     title: 'Customers',
-    href: '/home',
+    href: '/dashboard/customers',
     icon: CustomerIcon,
   },
 ]
