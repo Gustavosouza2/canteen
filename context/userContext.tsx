@@ -1,11 +1,5 @@
 'use client'
 
-import { useCookies } from 'react-cookie'
-import {
-  createClientComponentClient,
-  Session,
-  User,
-} from '@supabase/auth-helpers-nextjs'
 import {
   createContext,
   useContext,
@@ -13,63 +7,65 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { useRouter } from 'next/navigation'
 
-type UserType = {
-  session: Session | null
-  token: string | null
-  user: User | null
+import { LoginResponseSuccess } from '@/services/types/login'
+
+type UserData = {
+  userName: string | undefined
+  email: string | undefined
+  id: string
 }
 
-const UserContext = createContext<UserType | undefined>({
-  session: null,
+type UserContextProps = {
+  handleLogin: (e: LoginResponseSuccess) => void
+  userData: UserData | null
+  handleLogout: () => void
+  token: string | null
+}
+export const UserContext = createContext<UserContextProps>({
+  handleLogout: () => {},
+  handleLogin: () => {},
+  userData: null,
   token: null,
-  user: null,
 })
 
-export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [session, setSession] = useState<Session | null>(null)
-  const [user, setUser] = useState<User | null>(null)
-  const [cookies, setCookie] = useCookies(['token'])
-  const supabase = createClientComponentClient()
+export const UserContextProvider: React.FC<{
+  children?: ReactNode
+  user: UserData
+  token: string
+}> = ({ token: tokenCookie, user, children }) => {
+  const [userData, setUserData] = useState<UserContextProps['userData']>(
+    user || null,
+  )
+
+  const { push, replace } = useRouter()
+
+  const [token, setToken] = useState<string | null>(tokenCookie)
 
   useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      const session = await supabase.auth.getSession()
+    if (!userData && user) setUserData(user)
+  }, [userData, user])
 
-      setSession(session.data.session)
-      setUser(user)
-    }
+  const handleLogin = ({ user, session }: LoginResponseSuccess) => {
+    setUserData({ userName: user.phone, email: user.email, id: user.id })
+    setToken(session.access_token)
 
-    getUser()
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN') {
-        setUser(session?.user ?? null)
-        setCookie('token', session?.access_token, { path: '/' })
-        setSession(session)
-      } else if (event === 'SIGNED_OUT') {
-        setUser(null)
-        setSession(null)
-      }
-    })
+    return push('/dashboard/home')
+  }
 
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [supabase, setUser, setCookie])
-
+  const handleLogout = () => {
+    setToken(null)
+    setUserData(null)
+    replace('/login')
+  }
   return (
     <UserContext.Provider
       value={{
-        user,
-        session,
-        token: cookies?.token,
+        token,
+        userData,
+        handleLogin,
+        handleLogout,
       }}
     >
       {children}
@@ -77,14 +73,4 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
   )
 }
 
-export const useUserContext = () => {
-  const context = useContext(UserContext)
-  if (context === undefined) {
-    throw new Error('useUser must be used within a UserContextProvider')
-  }
-  return {
-    id: context?.user?.id ?? null,
-    token: context?.token ?? null,
-    email: context.user?.email ?? null,
-  }
-}
+export const useUserContext = () => useContext(UserContext)

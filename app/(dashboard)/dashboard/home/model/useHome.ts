@@ -2,13 +2,13 @@ import { useUserContext } from '@/context/userContext'
 import useUsersQuery from '@/hooks/custom/use-users'
 
 export const useHome = () => {
-  const { email } = useUserContext()
+  const { userData } = useUserContext()
 
   const { data: customers, isLoading } = useUsersQuery()
 
   const cardItems = [
     {
-      info: `Bem vindo de volta ${email?.slice(0, 7) || 'Admin'}!`,
+      info: `Bem vindo de volta ${userData?.email?.slice(0, 7) || 'Admin'}!`,
     },
     {
       title: 'Clientes',

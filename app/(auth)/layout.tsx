@@ -1,4 +1,4 @@
-import '../globals.css'
+import '../styles/globals.css'
 
 import { LoginLayoutComponent } from '@/app/(auth)/layout/public'
 import { Toaster } from '@/components/ui/toaster'

@@ -2,16 +2,22 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse, NextRequest } from 'next/server'
 
 export async function middleware(req: NextRequest) {
-  const token = req.cookies?.get('token')
+  const pathname = req.nextUrl.pathname
+  const token = req.cookies.get('token')
 
-  if (!token && req.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect('/login')
+  const supabase = createMiddlewareClient({ req, res: NextResponse.next() })
+
+  if (!token && pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', req.url))
   }
 
-  const res = NextResponse.next()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  const supabase = createMiddlewareClient({ req, res })
+  if (!session && pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', req.url))
+  }
 
-  await supabase.auth.getSession()
-  return res
+  return NextResponse.next()
 }

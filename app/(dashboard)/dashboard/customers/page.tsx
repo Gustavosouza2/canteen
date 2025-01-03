@@ -14,7 +14,6 @@ export default function Customers() {
     { name: 'amount', label: 'Amount:', size: '20' },
   ]
 
-
   return (
     <div className="flex h-full w-full md:-ml-44 items-center justify-center">
       <DataTable

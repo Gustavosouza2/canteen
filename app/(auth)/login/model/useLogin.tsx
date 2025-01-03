@@ -1,19 +1,22 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@/hooks/ui/use-toast'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react'
 import { z } from 'zod'
 
+import { useUserContext } from '@/context/userContext'
 import { LoginSchema } from '@/utils/login-schema'
+import { Cookies } from 'react-cookie'
 
 export const useLogin = () => {
   const [isPending, startTransition] = useTransition()
+  const cookies = new Cookies()
+
+  const { handleLogin } = useUserContext()
 
   const supabase = createClientComponentClient()
   const { toast } = useToast()
-  const router = useRouter()
 
   const form = useForm({
     defaultValues: { email: '', password: '' },
@@ -29,26 +32,28 @@ export const useLogin = () => {
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     if (!isPending) {
       startTransition(async () => {
-        const { error, data: loginData } =
-          await supabase.auth.signInWithPassword({
+        await supabase.auth
+          .signInWithPassword({
             email: data.email,
             password: data.password,
           })
-        const token = loginData.session?.access_token
-
-        if (token) {
-          router.push('/dashboard/home')
-        }
-        if (error) {
-          toast({
-            title: 'Login Failed',
-            description:
-              'The email or password you entered is incorrect. Please check your credentials and try again',
-            variant: 'default',
+          .then((res) => {
+            handleLogin(res.data as any)
+            cookies.set('userData', {
+              userName: res.data?.user?.phone,
+              email: res.data?.user?.email,
+              id: res.data?.user?.id,
+              token: res.data?.session?.access_token,
+            })
           })
-        } else {
-          router.push('/dashboard/home')
-        }
+          .catch(() => {
+            toast({
+              title: 'Login Failed!',
+              description:
+                'The email or password you entered is incorrect. Please check your credentials and try again',
+              variant: 'default',
+            })
+          })
       })
     }
   }
