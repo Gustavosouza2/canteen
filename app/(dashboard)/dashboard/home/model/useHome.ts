@@ -6,6 +6,12 @@ export const useHome = () => {
 
   const { data: customers, isLoading } = useUsersQuery()
 
+  const totalAmount = customers
+    ?.map((customer) => customer?.amount)
+    .reduce((acc: number, currAmount: number) => {
+      return acc + currAmount
+    }, 0)
+
   const cardItems = [
     {
       info: `Bem vindo de volta ${userData?.email?.slice(0, 7) || 'Admin'}!`,
@@ -17,7 +23,7 @@ export const useHome = () => {
     },
     {
       title: 'Valor total de vendas',
-      info: `R$${10}`,
+      info: `R$${totalAmount}`,
       description: 'Numero total de vendas realizadas',
     },
   ]

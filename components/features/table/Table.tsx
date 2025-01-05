@@ -1,98 +1,96 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
   TableHeader,
+  TableFooter,
+  TableCell,
+  TableBody,
+  TableHead,
   TableRow,
+  Table,
 } from '@/components/ui/table'
-import * as Types from './type'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Badge } from '@/components/ui/badge'
 
-const getStatusColor = (status: string) => {
-  switch (status?.toLowerCase()) {
-    case 'success':
-      return 'text-green-500'
-    case 'processing':
-      return 'text-yellow-500'
-    case 'failed':
-      return 'text-red-500'
-    default:
-      return 'text-gray-500'
-  }
+import * as Types from './type'
+
+const badgePropsColor: Record<string, JSX.Element> = {
+  done: (
+    <Badge className="bg-zinc-800 rounded-xl text-green-500 font-mono font-medium hover:bg-zinc-900">
+      Done
+    </Badge>
+  ),
+  pending: (
+    <Badge className="bg-zinc-800 text-orange-500  font-mono font-medium rounded-xl hover:bg-zinc-900">
+      Pending
+    </Badge>
+  ),
 }
 
 export function DataTable<T extends Array<any>>({
+  data,
   footer,
   columns,
-  data,
-  title,
   isLoading,
 }: Types.DataTableProps<T>) {
   return (
     <div className="w-full">
-      <h1 className="text-[#D1D1D2] mb-1">{title}:</h1>
-      <div className="rounded-xl border border-[#DA4453] p-5 w-full">
-        <Table className="w-full">
-          {data && data?.length >= 1 && (
-            <>
-              <TableHeader>
-                <TableRow className="border-b border-[#DA4453]/20 hover:bg-transparent">
-                  {columns.map((column, index) => (
-                    <TableHead
-                      className={`w-${column.size} text-gray-400 font-medium place-items-center`}
-                      key={`th-${index}`}
+      <div className="rounded-xl p-5 w-full">
+        {isLoading ? (
+          <Skeleton className="w-full h-96 rounded-xl" />
+        ) : (
+          <Table className="w-full">
+            {data && data?.length >= 1 && (
+              <>
+                <TableHeader>
+                  <TableRow className="border-b border-[#FFFA]/20 hover:bg-transparent">
+                    {columns.map((column, index) => (
+                      <TableHead
+                        className={`w-${column.size} text-gray-400 font-medium place-items-center`}
+                        key={`th-${index}`}
+                      >
+                        {column.label}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.map(({ onClickRow, ...data }, dataIndex) => (
+                    <TableRow
+                      key={`tr-${dataIndex}`}
+                      className="border-b  border-[#FFFA]/10 hover:bg-[#FFFA]/5 transition-colors"
                     >
-                      {column.label}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.map(({ onClickRow, ...data }, dataIndex) => (
-                  <TableRow
-                    key={`tr-${dataIndex}`}
-                    className="border-b border-[#DA4453]/20 hover:bg-[#DA4453]/5 transition-colors"
-                  >
-                    {isLoading ? (
-                      <Skeleton className="w-[200px] rounded-xl " />
-                    ) : (
-                      columns.map((column, columnIndex) => (
+                      {columns.map((column, columnIndex) => (
                         <TableCell
-                          className={`w-${column.size} ${
-                            column.name === 'status'
-                              ? getStatusColor(data[column.name])
-                              : 'text-gray-200'
-                          }`}
+                          className={`w-${column.size}`}
                           key={`tr-${columnIndex}`}
                           onClick={onClickRow}
                         >
-                          {data[column.name] ? data[column.name] : '-'}
+                          {column.name === 'status'
+                            ? badgePropsColor[data[column.name]]
+                            : data[column.name] || '-'}
                         </TableCell>
-                      ))
-                    )}
-                  </TableRow>
-                ))}
-              </TableBody>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
 
-              {!!footer && (
-                <TableFooter>
-                  <TableRow className="border-t border-[#DA4453]/20">
-                    <TableCell colSpan={3} className="text-gray-400">
-                      Total
-                    </TableCell>
-                    <TableCell className="text-right text-gray-200">
-                      $2,500.00
-                    </TableCell>
-                  </TableRow>
-                </TableFooter>
-              )}
-            </>
-          )}
-        </Table>
+                {!!footer && (
+                  <TableFooter>
+                    <TableRow className="border-t  border-[#FFFA]/20">
+                      <TableCell colSpan={3} className="text-gray-400">
+                        Total
+                      </TableCell>
+                      <TableCell className="text-right text-gray-200">
+                        $2,500.00
+                      </TableCell>
+                    </TableRow>
+                  </TableFooter>
+                )}
+              </>
+            )}
+          </Table>
+        )}
       </div>
     </div>
   )

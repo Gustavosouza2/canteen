@@ -39,6 +39,7 @@ export const useLogin = () => {
           })
           .then((res) => {
             handleLogin(res.data as any)
+            cookies.set('token', res.data?.session?.access_token)
             cookies.set('userData', {
               userName: res.data?.user?.phone,
               email: res.data?.user?.email,

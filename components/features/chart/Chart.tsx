@@ -49,7 +49,7 @@ export const Chart = ({ isLoading }: ChartProps) => {
       {isLoading ? (
         <Skeleton className="w-full h-72 rounded-xl" />
       ) : (
-        <Card className="bg-transparent h-[300px] rounded-xl border  border-[#DA4453]">
+        <Card className="h-[300px] rounded-xl border border-[#FFFA]/10 bg-[#0E0E10]">
           <CardHeader className="pb-2">
             <CardTitle className="text-[#D1D1D2]">Situação Mensal</CardTitle>
             <CardDescription className="text-[#A1A1AA]">

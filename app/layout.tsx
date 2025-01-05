@@ -5,8 +5,8 @@ import './styles/globals.css'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Dash',
-    default: 'DashTrack',
+    template: '%s | Kuro',
+    default: 'Kuro',
   },
 }
 

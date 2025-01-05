@@ -34,7 +34,7 @@ const items: NavItem[] = [
 
 export const Sidebar = () => {
   return (
-    <SideBarShad className="border-[#a1a1aa28] bg-[#1E1E20] w-40 ">
+    <SideBarShad className="border-[#a1a1aa28] bg-[#1E1E20] w-36">
       <SidebarContent className="bg-[#1E1E20]">
         <SidebarGroup>
           <SidebarGroupContent>

@@ -1,8 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { createBrowserClient } from '@supabase/ssr'
-import type { Database } from './database.types'
+// import type { Database } from './database.types'
+import type { Customer } from '@/services/types/customer'
 
-export type SupabaseClientType = SupabaseClient<Database>
+export type SupabaseClientType = SupabaseClient<Customer>
 let client: SupabaseClientType | undefined
 
 export function getSupabaseBrowserClient() {
@@ -10,7 +11,7 @@ export function getSupabaseBrowserClient() {
     return client
   }
 
-  client = createBrowserClient<Database>(
+  client = createBrowserClient<Customer>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   )

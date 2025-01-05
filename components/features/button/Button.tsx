@@ -8,7 +8,7 @@ type ButtonProps = {
 }
 export const Button = ({ isLoading, title }: ButtonProps) => {
   return (
-    <ButtonShad className="">
+    <ButtonShad className="" variant="default">
       {isLoading ? <Spinner className="" /> : title}
     </ButtonShad>
   )
