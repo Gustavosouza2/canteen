@@ -1,5 +1,6 @@
 'use client'
 
+import { SidebarProvider } from '@/components/ui/sidebar'
 import { Cookies, CookiesProvider } from 'react-cookie'
 import { Toaster } from '@/components/ui/toaster'
 import { GeistMono } from 'geist/font/mono'
@@ -24,10 +25,10 @@ export default function ClientLayoutRoot({
         <ReactQueryClientProvider>
           <html lang="en">
             <body
-              className={`${GeistSans.className} ${GeistMono.className} bg-[#121214]`}
+              className={`${GeistSans.className} ${GeistMono.className} bg-[#0F0F10]`}
             >
               <Toaster />
-              {children}
+              <SidebarProvider>{children}</SidebarProvider>
             </body>
           </html>
         </ReactQueryClientProvider>

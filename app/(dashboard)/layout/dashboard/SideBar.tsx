@@ -7,6 +7,7 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarMenu,
+  SidebarGroupLabel,
 } from '@/components/ui/sidebar'
 
 import { CustomerIcon, HomeIcon } from '@/components/icons'
@@ -34,9 +35,10 @@ const items: NavItem[] = [
 
 export const Sidebar = () => {
   return (
-    <SideBarShad className="border-[#a1a1aa28] bg-[#1E1E20] w-36">
-      <SidebarContent className="bg-[#1E1E20]">
+    <SideBarShad className="border-[#FFFA]/10 bg-transparent w-36">
+      <SidebarContent className="bg-[#121214]">
         <SidebarGroup>
+          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

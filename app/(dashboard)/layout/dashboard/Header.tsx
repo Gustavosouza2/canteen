@@ -8,7 +8,7 @@ export const HeaderDashboard = () => {
   const rawUserName = email?.slice(0, 7)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-10 flex justify-end items-center h-16 px-4 bg-[#1E1E20] border-b-2 border-[#a1a1aa28]">
+    <header className="fixed top-0 left-0 right-0 flex justify-end items-center h-16 px-4 border-[#FFFA]/10 bg-transparent border-b-2 ">
       <div className="flex flex-row gap-2">
         <Avatar>
           <AvatarImage

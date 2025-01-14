@@ -83,7 +83,7 @@ export const LoginView = (props: ReturnType<typeof useLogin>) => {
             )}
           />
           <Button
-            className="w-full h-11 bg-gradient-to-r from-[#BD3F32] to-[#DA4453] hover:from-[#ac323e] hover:to-[#993429] text-white font-semibold rounded-md"
+            className="w-full h-11 bg-gradient-to-r from-[#BD3F32] to-[#DA4453] hover:from-[#ac323e] hover:to-[#993429] text-white font-semibold rounded-lg"
             disabled={!isValid}
             type="submit"
           >

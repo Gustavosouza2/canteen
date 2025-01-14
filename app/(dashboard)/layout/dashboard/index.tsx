@@ -1,24 +1,26 @@
 'use client'
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { ReactNode } from 'react'
+
+import { SidebarInset } from '@/components/ui/sidebar'
+import { ReactNode, useEffect, useState } from 'react'
 
 import { useMobile } from '@/hooks/custom/use-custom-mobile'
-import { HeaderDashboard } from './Header'
 import { NavItems } from './NavItem'
-import { Sidebar } from './SideBar'
+import AppSidebar from '@/components/features/side-bar/app-sidebar'
 
 export const DashBoardLayout = ({ children }: { children: ReactNode }) => {
+  const [sideBarOpen, setSideBarOpen] = useState<boolean>()
+  const onToggleSideBar = () => setSideBarOpen((state) => !state)
   const isMobile = useMobile()
 
-  return (
-    <div className="h-screen">
-      {isMobile && <NavItems />}
-      <HeaderDashboard />
+  useEffect(() => {
+    console.log(sideBarOpen)
+  }, [sideBarOpen])
 
-      <SidebarProvider>
-        <Sidebar />
-        <div className="w-full">{children}</div>
-      </SidebarProvider>
+  // TODO: MUDAR ESTILOS
+  return (
+    <div className="flex h-screen w-full">
+      {isMobile ? <NavItems /> : <AppSidebar />}
+      <div className={` ${sideBarOpen ? '-ml-14' : 'ml-1'}  `}>{children}</div>
     </div>
   )
 }
