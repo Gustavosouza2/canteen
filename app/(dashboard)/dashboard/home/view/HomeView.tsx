@@ -1,9 +1,9 @@
-import { Chart } from '@/components/features/chart/Chart'
-import { Card } from '@/components/features/card/Card'
-import { useHome } from '../model/useHome'
+import { Chart } from "@/components/features/chart/Chart";
+import { Card } from "@/components/features/card/Card";
+import { useHome } from "../model/useHome";
 
 export const HomeView = (props: ReturnType<typeof useHome>) => {
-  const { cardItems, isLoading } = props
+  const { cardItems, isLoading } = props;
 
   return (
     <main className="flex flex-col gap-6 p-6 md:-ml-72 my-24 mx-14 relative items-center justify-center">
@@ -15,5 +15,5 @@ export const HomeView = (props: ReturnType<typeof useHome>) => {
         <Chart isLoading={isLoading} />
       </div>
     </main>
-  )
-}
+  );
+};

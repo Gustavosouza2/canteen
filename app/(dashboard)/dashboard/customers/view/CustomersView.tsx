@@ -1,12 +1,12 @@
-import { DataTable } from '@/components/features/table'
-import { useCustomers } from '../model/useCustomers'
-import { Button } from '@/components/ui/button'
+import { DataTable } from "@/components/features/table";
+import { useCustomers } from "../model/useCustomers";
+import { Button } from "@/components/ui/button";
 
-export const viewCustomers = (props: ReturnType<typeof useCustomers>) => {
-  const { customers, isLoading, columns } = props
+export const customersView = (props: ReturnType<typeof useCustomers>) => {
+  const { customers, isLoading, columns } = props;
 
   return (
-    <div className="flex flex-col md:-ml-44  top-28 md:right-24 relative">
+    <div className="flex flex-col w-full md:mr-96 mx-12">
       <div className="flex flex-row justify-between">
         <h1 className="text-gray-300 font-mono font-medium tracking-wide ml-5 mt-1">
           Clientes:
@@ -26,5 +26,5 @@ export const viewCustomers = (props: ReturnType<typeof useCustomers>) => {
         title="Clientes"
       />
     </div>
-  )
-}
+  );
+};
