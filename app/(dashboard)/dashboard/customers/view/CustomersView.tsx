@@ -3,7 +3,7 @@ import { useCustomers } from "../model/useCustomers";
 import { Button } from "@/components/ui/button";
 
 export const customersView = (props: ReturnType<typeof useCustomers>) => {
-  const { customers, isLoading, columns } = props;
+  const { customers, isLoading, columns, setPage, totalPages, page } = props;
 
   return (
     <div className="flex flex-col w-full md:mr-96 mx-12">
@@ -13,15 +13,18 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
         </h1>
 
         <div>
-          <Button variant="secondary" className="rounded-xl">
+          <Button variant="secondary" className="rounded-xl mb-5">
             Novo Cliente
           </Button>
         </div>
       </div>
 
       <DataTable
+        onPageChange={(page) => setPage(page)}
         data={customers as any}
+        totalPages={totalPages}
         isLoading={isLoading}
+        currentPage={page}
         columns={columns}
         title="Clientes"
       />

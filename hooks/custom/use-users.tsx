@@ -1,17 +1,23 @@
-import { useQuery } from '@tanstack/react-query'
-import { getUsers } from '../../app/(dashboard)/api/queries/get-users'
-import useSupabase from './use-supabase'
-import { Customer } from '@/services/types/customer'
+import { useQuery } from "@tanstack/react-query";
 
-function useUsersQuery() {
-  const client = useSupabase()
-  const queryKey = ['User']
+import { getUsers } from "../../app/(dashboard)/api/queries/get-users";
+import { Customer } from "@/services/types/customer";
+import useSupabase from "./use-supabase";
+
+function useUsersQuery(page: number, pageSize: number) {
+  const client = useSupabase();
+  const queryKey = ["User", page, pageSize];
 
   const queryFn = async () => {
-    return getUsers(client).then((result) => result.data as Customer[])
-  }
+    return getUsers(client, page, pageSize).then((result) => {
+      return {
+        data: result.data as Customer[],
+        count: result.count,
+      };
+    });
+  };
 
-  return useQuery({ queryKey, queryFn })
+  return useQuery({ queryKey, queryFn });
 }
 
-export default useUsersQuery
+export default useUsersQuery;

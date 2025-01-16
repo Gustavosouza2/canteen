@@ -25,18 +25,18 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Kuro</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-md"></SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
             key={item.title}
             asChild
             defaultOpen={item.isActive}
-            className="group/collapsible"
+            className="group/collapsible text-md"
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton>
                   {item.icon && <item.icon />}
                   <a href={item.url}>
                     <span>{item.title}</span>

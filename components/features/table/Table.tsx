@@ -8,33 +8,37 @@ import {
   TableHead,
   TableRow,
   Table,
-} from '@/components/ui/table'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Badge } from '@/components/ui/badge'
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
-import * as Types from './type'
+import * as Types from "./type";
+import { PaginationTeste } from "../pagination/Pagination";
 
 const badgePropsColor: Record<string, JSX.Element> = {
   done: (
     <Badge className="bg-zinc-800 rounded-xl text-green-500 font-mono font-medium hover:bg-zinc-900">
-      Done
+      Pago
     </Badge>
   ),
   pending: (
     <Badge className="bg-zinc-800 text-orange-500  font-mono font-medium rounded-xl hover:bg-zinc-900">
-      Pending
+      Depois
     </Badge>
   ),
-}
+};
 
 export function DataTable<T extends Array<any>>({
   data,
   footer,
   columns,
   isLoading,
+  totalPages,
+  currentPage,
+  onPageChange,
 }: Types.DataTableProps<T>) {
   return (
-    <div className="w-full">
+    <div className="w-full border border-[#FFFA]/10 rounded-xl">
       <div className="rounded-xl p-5 w-full">
         {isLoading ? (
           <Skeleton className="w-full h-96 rounded-xl" />
@@ -66,9 +70,9 @@ export function DataTable<T extends Array<any>>({
                           key={`tr-${columnIndex}`}
                           onClick={onClickRow}
                         >
-                          {column.name === 'status'
+                          {column.name === "status"
                             ? badgePropsColor[data[column.name]]
-                            : data[column.name] || '-'}
+                            : data[column.name] || "-"}
                         </TableCell>
                       ))}
                     </TableRow>
@@ -91,7 +95,12 @@ export function DataTable<T extends Array<any>>({
             )}
           </Table>
         )}
+        <PaginationTeste
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={onPageChange}
+        />
       </div>
     </div>
-  )
+  );
 }

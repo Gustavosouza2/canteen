@@ -27,7 +27,7 @@ export const items: NavItem[] = [
     icon: HomeIcon,
   },
   {
-    title: "Customers",
+    title: "Clientes",
     href: "/dashboard/customers",
     icon: CustomerIcon,
   },
