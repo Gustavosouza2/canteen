@@ -17,10 +17,6 @@ export const useCustomers = () => {
     }
   }, [customers?.count, page]);
 
-  useEffect(() => {
-    console.log("Current customers data:", customers); // Para debug
-  }, [customers]);
-
   const columns = [
     { name: "name", label: "Nome:", size: "30" },
     { name: "email", label: "Email:", size: "30" },

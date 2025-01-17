@@ -1,10 +1,12 @@
 import { useUserContext } from "@/context/userContext";
 import useUsersQuery from "@/hooks/custom/use-users";
 
+const PAGE_SIZE = 10;
+
 export const useHome = () => {
   const { userData } = useUserContext();
 
-  const { data: customers, isLoading } = useUsersQuery(0, 10);
+  const { data: customers, isLoading } = useUsersQuery(1, PAGE_SIZE);
 
   const totalAmount = customers?.data
     ?.map((customer) => customer?.amount)
