@@ -6,7 +6,7 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
   const { customers, isLoading, columns, setPage, totalPages, page } = props;
 
   return (
-    <div className="flex flex-col w-full md:mr-96 mx-12">
+    <div className="flex flex-col w-full md:mr-96 px-10">
       <div className="flex flex-row justify-between">
         <h1 className="text-gray-300 font-mono font-medium tracking-wide ml-5 mt-1">
           Clientes:

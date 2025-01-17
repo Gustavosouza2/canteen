@@ -8,6 +8,7 @@ import {
   SidebarGroup,
   SidebarMenu,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 export function NavMain({
   items,
@@ -37,10 +38,14 @@ export function NavMain({
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton>
-                  {item.icon && <item.icon />}
-                  <a href={item.url}>
-                    <span>{item.title}</span>
-                  </a>
+                  <Link href={item.url}>
+                    <div className="flex justify-between items-center gap-2">
+                      {item.icon && <item.icon />}
+                      <span className="text-md font-mono text-zinc-300">
+                        {item.title}
+                      </span>
+                    </div>
+                  </Link>
                 </SidebarMenuButton>
               </CollapsibleTrigger>
             </SidebarMenuItem>

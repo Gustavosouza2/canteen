@@ -1,14 +1,15 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, LogOut } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import { Button } from '../../ui/button'
+} from "@/components/ui/popover";
+import { Button } from "../../ui/button";
+import Link from "next/link";
 
 interface UserMenuProps {
-  name: string | null
-  email: string | null
+  name: string | null;
+  email: string | null;
 }
 export const UserMenu = ({ email, name }: UserMenuProps) => {
   return (
@@ -17,8 +18,8 @@ export const UserMenu = ({ email, name }: UserMenuProps) => {
         asChild
         className="md:mr-16 bg-transparent border-1 border-[#FFFA]/10 hover:bg-[#1E1E20] hover:text-[#373738]"
       >
-        <Button variant="outline" size="icon">
-          <ChevronDown className="text-[#fafafaaf] hover:bg-[#1E1E20] hover:text-[#373738]" />
+        <Button variant="outline" size="icon" className="hover:bg-transparent">
+          <ChevronDown className="text-[#fafafaaf]" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex border-[#FFFA]/10 bg-[#0E0E10] mr-10 mt-2 rounded-xl">
@@ -40,8 +41,18 @@ export const UserMenu = ({ email, name }: UserMenuProps) => {
               {email}
             </p>
           </div>
+
+          <div className="flex flex row items-center gap-2 mt-2">
+            <LogOut className="w-4 h-4 text-[#fafafa]" />
+            <Link
+              href="/login"
+              className="text-[#fafafa] text-sm font-mono font-bold"
+            >
+              Log out
+            </Link>
+          </div>
         </div>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};

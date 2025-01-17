@@ -19,9 +19,9 @@ export default function ClientLayoutRoot({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
   const isMobile = useMobile();
   const cookies = new Cookies();
+  const pathname = usePathname();
   const user = cookies.get("user");
   const token = cookies.get("token");
 
@@ -36,11 +36,6 @@ export default function ClientLayoutRoot({
       url: "/dashboard/customers",
       icon: CustomerIcon,
     },
-    // {
-    //   title: "Controle de Gastos",
-    //   url: "/dashboard/customers",
-    //   icon: CustomerIcon,
-    // },
   ];
 
   return (
