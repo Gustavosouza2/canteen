@@ -1,15 +1,25 @@
 import useUsersQuery from "@/hooks/custom/use-users";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PAGE_SIZE = 10;
 
 export const useCustomers = () => {
   const [page, setPage] = useState<number>(1);
   const { data: customers, isLoading } = useUsersQuery(page, PAGE_SIZE);
-  console.log(customers);
-  const totalPages = customers
-    ? Math.ceil(customers?.count ?? 0 / PAGE_SIZE)
-    : 0;
+
+  const totalPages = customers?.count
+    ? Math.max(1, Math.ceil(customers.count / PAGE_SIZE))
+    : 1;
+
+  useEffect(() => {
+    if (customers?.count && customers.count <= PAGE_SIZE && page !== 1) {
+      setPage(1);
+    }
+  }, [customers?.count, page]);
+
+  useEffect(() => {
+    console.log("Current customers data:", customers); // Para debug
+  }, [customers]);
 
   const columns = [
     { name: "name", label: "Nome:", size: "30" },
@@ -21,7 +31,7 @@ export const useCustomers = () => {
   return {
     totalPages,
     isLoading,
-    customers,
+    customers: customers?.data || [],
     setPage,
     columns,
     page,

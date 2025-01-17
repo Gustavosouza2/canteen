@@ -25,7 +25,7 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-md"></SidebarGroupLabel>
+      <SidebarGroupLabel className="text-md mb-10 mt-5">Kuro</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

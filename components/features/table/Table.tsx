@@ -18,12 +18,12 @@ import { PaginationTeste } from "../pagination/Pagination";
 const badgePropsColor: Record<string, JSX.Element> = {
   done: (
     <Badge className="bg-zinc-800 rounded-xl text-green-500 font-mono font-medium hover:bg-zinc-900">
-      Pago
+      Done
     </Badge>
   ),
   pending: (
     <Badge className="bg-zinc-800 text-orange-500  font-mono font-medium rounded-xl hover:bg-zinc-900">
-      Depois
+      Pending
     </Badge>
   ),
 };

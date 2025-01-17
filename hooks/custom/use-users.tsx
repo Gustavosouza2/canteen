@@ -1,7 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-
 import { getUsers } from "../../app/(dashboard)/api/queries/get-users";
 import { Customer } from "@/services/types/customer";
+import { useQuery } from "@tanstack/react-query";
 import useSupabase from "./use-supabase";
 
 function useUsersQuery(page: number, pageSize: number) {
@@ -9,15 +8,17 @@ function useUsersQuery(page: number, pageSize: number) {
   const queryKey = ["User", page, pageSize];
 
   const queryFn = async () => {
-    return getUsers(client, page, pageSize).then((result) => {
-      return {
-        data: result.data as Customer[],
-        count: result.count,
-      };
-    });
+    const { data, count } = await getUsers(client, pageSize, page);
+
+    return { data: data as Customer[], count: count || 0 };
   };
 
-  return useQuery({ queryKey, queryFn });
+  return useQuery({
+    staleTime: 1000 * 60,
+    queryKey,
+    retry: 2,
+    queryFn,
+  });
 }
 
 export default useUsersQuery;
