@@ -1,9 +1,10 @@
-import { DataTable } from "@/components/features/table";
-import { useCustomers } from "../model/useCustomers";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
+
+import { useCustomers } from '../model/useCustomers'
+import { DataTable } from '@/components/features/Table/Table'
 
 export const customersView = (props: ReturnType<typeof useCustomers>) => {
-  const { customers, isLoading, columns, setPage, totalPages, page } = props;
+  const { customers, isLoading, columns, setPage, totalPages, page } = props
 
   return (
     <div className="flex flex-col w-full md:mr-96 px-10">
@@ -29,5 +30,5 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
         title="Clientes"
       />
     </div>
-  );
-};
+  )
+}

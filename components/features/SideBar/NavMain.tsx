@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { CollapsibleTrigger, Collapsible } from "@/components/ui/collapsible";
+import { CollapsibleTrigger, Collapsible } from '@/components/ui/collapsible'
 import {
   SidebarMenuButton,
   SidebarGroupLabel,
   SidebarMenuItem,
   SidebarGroup,
   SidebarMenu,
-} from "@/components/ui/sidebar";
-import Link from "next/link";
+} from '@/components/ui/sidebar'
+import Link from 'next/link'
 
 export function NavMain({
   items,
 }: {
   items: {
-    icon?: () => JSX.Element;
-    isActive?: boolean;
-    title: string;
-    url: string;
+    icon?: () => JSX.Element
+    isActive?: boolean
+    title: string
+    url: string
     items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
+      title: string
+      url: string
+    }[]
+  }[]
 }) {
   return (
     <SidebarGroup>
@@ -53,5 +53,5 @@ export function NavMain({
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  );
+  )
 }

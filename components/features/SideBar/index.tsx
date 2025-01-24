@@ -1,34 +1,34 @@
-"use client";
+'use client'
 
-import * as React from "react";
+import * as React from 'react'
 
 import {
   SidebarContent,
   SidebarFooter,
   SidebarRail,
   Sidebar,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar'
 
-import { NavMain } from "./nav-main";
-import { NavUser } from "./nav-user";
+import { NavMain } from './NavMain'
+import { NavUser } from './NavUser'
 
 type SideBarProps = {
   navItems: {
-    icon?: () => JSX.Element;
-    isActive?: boolean;
-    title: string;
-    url: string;
+    icon?: () => JSX.Element
+    isActive?: boolean
+    title: string
+    url: string
     items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
+      title: string
+      url: string
+    }[]
+  }[]
 
   user: {
-    name: string;
-    email: string;
-  };
-};
+    name: string
+    email: string
+  }
+}
 export default function AppSidebar({ navItems, user }: SideBarProps) {
   return (
     <Sidebar collapsible="icon" className="w-52 bg-[#0F0F10]">
@@ -40,5 +40,5 @@ export default function AppSidebar({ navItems, user }: SideBarProps) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

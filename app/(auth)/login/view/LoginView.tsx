@@ -1,5 +1,4 @@
-import { Spinner } from '@/components/features/spinner/Spinner'
-import { Input } from '@/components/features/input/Input'
+import { Input } from '@/components/features/Input'
 import { Button } from '@/components/ui/button'
 
 import {
@@ -11,6 +10,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { useLogin } from '../model/useLogin'
+import { Spinner } from '@/assets/icons/SpinnerIcon'
 
 export const LoginView = (props: ReturnType<typeof useLogin>) => {
   const { register, isValid, form, isPending, onSubmit } = props

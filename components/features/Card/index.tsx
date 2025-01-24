@@ -17,14 +17,14 @@ interface CardMapProps {
   isLoading: boolean
 }
 export const Card = ({ data, isLoading }: CardMapProps) => {
-  return data.map((item, i) => (
+  return data.map((item, index: number) => (
     <>
       {isLoading ? (
         <Skeleton className="w-[330px] h-36 rounded-xl " />
       ) : (
         <CardShadcn
           className="w-full rounded-xl border  border-[#FFFA]/10 bg-[#0E0E10]"
-          key={i}
+          key={index}
         >
           <CardHeader>
             <CardTitle className="text-[#D1D1D2] font-mono text-md whitespace-normal tracking-wide">

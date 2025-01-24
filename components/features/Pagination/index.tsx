@@ -1,25 +1,25 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
-  Pagination,
   PaginationItem,
   PaginationContent,
   PaginationEllipsis,
-} from "@/components/ui/pagination";
+  Pagination as PaginationShad,
+} from '@/components/ui/pagination'
 
 type PaginationProps = {
-  onPageChange: (page: number) => void;
-  currentPage: number;
-  totalPages: number;
-};
+  onPageChange: (page: number) => void
+  currentPage: number
+  totalPages: number
+}
 
-export const PaginationTeste = ({
+export const Pagination = ({
   onPageChange,
   currentPage,
   totalPages,
 }: PaginationProps) => {
   return (
-    <Pagination className="mt-10">
+    <PaginationShad className="mt-10">
       <PaginationContent>
         {currentPage > 1 && (
           <PaginationItem>
@@ -58,6 +58,6 @@ export const PaginationTeste = ({
           </PaginationItem>
         )}
       </PaginationContent>
-    </Pagination>
-  );
-};
+    </PaginationShad>
+  )
+}

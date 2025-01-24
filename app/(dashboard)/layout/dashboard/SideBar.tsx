@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   Sidebar as SideBarShad,
   SidebarGroupContent,
@@ -8,30 +8,30 @@ import {
   SidebarGroup,
   SidebarMenu,
   SidebarGroupLabel,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar'
 
-import { CustomerIcon, HomeIcon } from "@/components/icons";
+import { CustomerIcon, HomeIcon } from '@/assets/icons'
 
 interface NavItem {
-  disabled?: boolean;
-  external?: boolean;
-  title: string;
-  href?: string;
-  icon: () => JSX.Element;
+  disabled?: boolean
+  external?: boolean
+  title: string
+  href?: string
+  icon: () => JSX.Element
 }
 
 export const items: NavItem[] = [
   {
-    title: "Home",
-    href: "/dashboard/home",
+    title: 'Home',
+    href: '/dashboard/home',
     icon: HomeIcon,
   },
   {
-    title: "Clientes",
-    href: "/dashboard/customers",
+    title: 'Clientes',
+    href: '/dashboard/customers',
     icon: CustomerIcon,
   },
-];
+]
 
 export const Sidebar = () => {
   return (
@@ -61,5 +61,5 @@ export const Sidebar = () => {
         </SidebarGroup>
       </SidebarContent>
     </SideBarShad>
-  );
-};
+  )
+}

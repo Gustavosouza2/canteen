@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { ChevronsUpDown, LogOut } from "lucide-react";
+import { ChevronsUpDown, LogOut } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenuSeparator,
   DropdownMenuContent,
@@ -10,13 +10,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenu,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenu,
   useSidebar,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar'
 
 export const AvatarComponent = () => {
   return (
@@ -29,18 +29,18 @@ export const AvatarComponent = () => {
       />
       <AvatarFallback>GS</AvatarFallback>
     </Avatar>
-  );
-};
+  )
+}
 
 export function NavUser({
   user,
 }: {
   user: {
-    name: string;
-    email: string;
-  };
+    name: string
+    email: string
+  }
 }) {
-  const { isMobile } = useSidebar();
+  const { isMobile } = useSidebar()
 
   return (
     <SidebarMenu className="rounded">
@@ -54,10 +54,10 @@ export function NavUser({
               {AvatarComponent()}
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold font-mono text-[#D1D1D2]">
-                  {user?.name || "Admin"}
+                  {user?.name || 'Admin'}
                 </span>
                 <span className="text-xs font-mono text-[#D1D1D2]">
-                  {user?.email || "Admin@gmail.com"}
+                  {user?.email || 'Admin@gmail.com'}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -65,7 +65,7 @@ export function NavUser({
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded bg-[#0F0F10]"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
             align="end"
           >
@@ -74,10 +74,10 @@ export function NavUser({
                 {AvatarComponent()}
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    {user?.name || "Admin"}
+                    {user?.name || 'Admin'}
                   </span>
                   <span className="truncate text-xs">
-                    {user?.email || "Admin@gmail.com"}
+                    {user?.email || 'Admin@gmail.com'}
                   </span>
                 </div>
               </div>
@@ -92,5 +92,5 @@ export function NavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }

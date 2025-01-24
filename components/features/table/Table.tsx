@@ -8,14 +8,15 @@ import {
   TableHead,
   TableRow,
   Table,
-} from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 
-import * as Types from "./type";
-import { PaginationTeste } from "../pagination/Pagination";
+import { Pagination } from '../Pagination'
+import { DataTableProps } from '@/types/table'
+import { parsedDataTable } from '@/utils/parsed-data-table'
 
-const badgePropsColor: Record<string, JSX.Element> = {
+const BADGE_PROPS_COLOR: Record<string, JSX.Element> = {
   done: (
     <Badge className="bg-zinc-800 rounded-xl text-green-500 font-mono font-medium hover:bg-zinc-900">
       Pago
@@ -26,19 +27,7 @@ const badgePropsColor: Record<string, JSX.Element> = {
       Depois
     </Badge>
   ),
-};
-
-const parsedDataTable = (data: any, column: Types.TableColumn<any>) => {
-  if (column.name === "amount")
-    return Number(data[column.name]).toLocaleString("pt-br", {
-      style: "currency",
-      currency: "BRL",
-    });
-
-  if (column.name === "status") return badgePropsColor[data[column.name]];
-
-  return data[column.name];
-};
+}
 
 export function DataTable<T extends Array<any>>({
   data,
@@ -48,7 +37,7 @@ export function DataTable<T extends Array<any>>({
   totalPages,
   currentPage,
   onPageChange,
-}: Types.DataTableProps<T>) {
+}: DataTableProps<T>) {
   return (
     <>
       {isLoading ? (
@@ -83,7 +72,7 @@ export function DataTable<T extends Array<any>>({
                             key={`tr-${columnIndex}`}
                             onClick={onClickRow}
                           >
-                            {parsedDataTable(data, column)}
+                            {parsedDataTable(data, column, BADGE_PROPS_COLOR)}
                           </TableCell>
                         ))}
                       </TableRow>
@@ -105,7 +94,7 @@ export function DataTable<T extends Array<any>>({
                 </>
               )}
             </Table>
-            <PaginationTeste
+            <Pagination
               totalPages={totalPages}
               currentPage={currentPage}
               onPageChange={onPageChange}
@@ -114,5 +103,5 @@ export function DataTable<T extends Array<any>>({
         </div>
       )}
     </>
-  );
+  )
 }

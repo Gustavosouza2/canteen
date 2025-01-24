@@ -1,15 +1,15 @@
 'use client'
 
+import { LoginResponseSuccess } from '@/types/login'
 import {
   createContext,
   useContext,
   ReactNode,
   useEffect,
   useState,
+  useMemo,
 } from 'react'
 import { useRouter } from 'next/navigation'
-
-import { LoginResponseSuccess } from '@/services/types/login'
 
 type UserData = {
   userName: string | undefined
@@ -36,7 +36,7 @@ export const UserContextProvider: React.FC<{
   token: string
 }> = ({ token: tokenCookie, user, children }) => {
   const [userData, setUserData] = useState<UserContextProps['userData']>(
-    user || null,
+    user ?? null,
   )
 
   const { push, replace } = useRouter()
@@ -47,29 +47,36 @@ export const UserContextProvider: React.FC<{
     if (!userData && user) setUserData(user)
   }, [userData, user])
 
-  const handleLogin = ({ user, session }: LoginResponseSuccess) => {
-    setUserData({ userName: user.phone, email: user.email, id: user.id })
-    setToken(session.access_token)
+  const handleLogin = useMemo(
+    () =>
+      ({ user, session }: LoginResponseSuccess) => {
+        setUserData({ userName: user.phone, email: user.email, id: user.id })
+        setToken(session.access_token)
+        return push('/dashboard/home')
+      },
+    [push],
+  )
 
-    return push('/dashboard/home')
-  }
+  const handleLogout = useMemo(
+    () => () => {
+      setToken(null)
+      setUserData(null)
+      replace('/login')
+    },
+    [replace],
+  )
 
-  const handleLogout = () => {
-    setToken(null)
-    setUserData(null)
-    replace('/login')
-  }
+  const contextValue = useMemo(
+    () => ({
+      token,
+      userData,
+      handleLogin,
+      handleLogout,
+    }),
+    [token, userData, handleLogin, handleLogout],
+  )
   return (
-    <UserContext.Provider
-      value={{
-        token,
-        userData,
-        handleLogin,
-        handleLogout,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   )
 }
 

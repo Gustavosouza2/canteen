@@ -1,15 +1,15 @@
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut } from 'lucide-react'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "../../ui/button";
-import Link from "next/link";
+} from '@/components/ui/popover'
+import { Button } from '../../ui/button'
+import Link from 'next/link'
 
 interface UserMenuProps {
-  name: string | null;
-  email: string | null;
+  name: string | null
+  email: string | null
 }
 export const UserMenu = ({ email, name }: UserMenuProps) => {
   return (
@@ -42,7 +42,7 @@ export const UserMenu = ({ email, name }: UserMenuProps) => {
             </p>
           </div>
 
-          <div className="flex flex row items-center gap-2 mt-2">
+          <div className="flex row items-center gap-2 mt-2">
             <LogOut className="w-4 h-4 text-[#fafafa]" />
             <Link
               href="/login"
@@ -54,5 +54,5 @@ export const UserMenu = ({ email, name }: UserMenuProps) => {
         </div>
       </PopoverContent>
     </Popover>
-  );
-};
+  )
+}

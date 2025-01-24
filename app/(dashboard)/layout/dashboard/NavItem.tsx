@@ -1,7 +1,7 @@
-import * as React from "react";
-import Link from "next/link";
+import * as React from 'react'
+import Link from 'next/link'
 
-import { Icons } from "./Icons";
+import { Icons } from './Icons'
 
 export function NavItems() {
   return (
@@ -25,5 +25,5 @@ export function NavItems() {
         </div>
       </nav>
     </div>
-  );
+  )
 }

@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { createBrowserClient } from '@supabase/ssr'
 // import type { Database } from './database.types'
-import type { Customer } from '@/services/types/customer'
+import type { Customer } from '@/types/customer'
 
 export type SupabaseClientType = SupabaseClient<Customer>
 let client: SupabaseClientType | undefined
