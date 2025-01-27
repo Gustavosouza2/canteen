@@ -5,6 +5,8 @@ const PAGE_SIZE = 10
 
 export const useCustomers = () => {
   const [page, setPage] = useState<number>(1)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const handleIsOpen = () => setIsOpen(!isOpen)
   const { data: customers, isLoading } = useUsersQuery(page, PAGE_SIZE)
 
   const totalPages = customers?.count
@@ -26,10 +28,12 @@ export const useCustomers = () => {
 
   return {
     customers: customers?.data || [],
+    handleIsOpen,
     totalPages,
     isLoading,
     setPage,
     columns,
+    isOpen,
     page,
   }
 }

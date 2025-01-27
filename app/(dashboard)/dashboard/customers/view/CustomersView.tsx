@@ -1,10 +1,20 @@
 import { Button } from '@/components/ui/button'
 
-import { useCustomers } from '../model/useCustomers'
 import { DataTable } from '@/components/features/Table/Table'
+import { CreateCustomerModal } from '../create-customer'
+import { useCustomers } from '../model/useCustomers'
 
 export const customersView = (props: ReturnType<typeof useCustomers>) => {
-  const { customers, isLoading, columns, setPage, totalPages, page } = props
+  const {
+    handleIsOpen,
+    totalPages,
+    isLoading,
+    customers,
+    setPage,
+    columns,
+    isOpen,
+    page,
+  } = props
 
   return (
     <div className="flex flex-col w-full md:mr-96 px-10">
@@ -14,10 +24,16 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
         </h1>
 
         <div>
-          <Button variant="secondary" className="rounded-xl mb-5">
+          <Button
+            variant="secondary"
+            onClick={handleIsOpen}
+            className="rounded-xl mb-5"
+          >
             Novo Cliente
           </Button>
         </div>
+
+        <CreateCustomerModal isOpen={isOpen} onClose={handleIsOpen} />
       </div>
 
       <DataTable
