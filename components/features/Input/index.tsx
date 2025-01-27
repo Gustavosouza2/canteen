@@ -1,27 +1,29 @@
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
-import { UseFormRegister } from 'react-hook-form'
+import { Input as InputShad } from '@/components/ui/input'
 import { useState } from 'react'
 
-import { Input as InputShad, type InputProps } from '@/components/ui/input'
-import { Button } from '../../ui/button'
+import {
+  SelectTrigger,
+  SelectContent,
+  SelectValue,
+  SelectItem,
+  Select,
+} from '@/components/ui/select'
 
-type InputProperty = InputProps & {
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  register: UseFormRegister<any>
-  type: 'email' | 'password'
-  showPasswordTips?: boolean
-  placeholder: string
-}
+import { AbstractInputsProps } from './types'
+import { Button } from '../../ui/button'
 
 export const Input = ({
   showPasswordTips,
+  onValueChange,
   placeholder,
   className,
   register,
+  options,
   onChange,
   type,
   ...props
-}: InputProperty) => {
+}: AbstractInputsProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
   return (
@@ -40,6 +42,30 @@ export const Input = ({
               />
             </div>
           </>
+        )}
+
+        {type === 'select' && (
+          <Select onValueChange={onValueChange}>
+            <SelectTrigger
+              className="w-full rounded h-10 text-[#A1A1AA]
+        border border-transparent
+        focus:border-zinc-700 focus-visible:ring-0 focus-visible:ring-offset-0 
+        bg-zinc-900"
+            >
+              <SelectValue placeholder="Status" className="text-zinc-200" />
+            </SelectTrigger>
+            <SelectContent className="border-zinc-800 bg-zinc-900 text-zinc-200 rounded">
+              {options?.map((option) => (
+                <SelectItem
+                  key={option.id}
+                  value={option.value}
+                  className="focus:bg-zinc-800 text-[#A1A1AA]"
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         )}
 
         {type === 'password' && (

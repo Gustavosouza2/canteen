@@ -21,8 +21,13 @@ type CreateCustomerFormProps = {
 
 type InputsProps = Array<{
   name: 'email' | 'name' | 'amount' | 'status'
+  type: 'email' | 'password' | 'select'
+  options?: Array<{
+    label: string
+    value: string
+    id: number
+  }>
   register: UseFormRegister<any>
-  type: 'email' | 'password'
   placeholder: string
   label: string
   id: number
@@ -39,6 +44,11 @@ export const CreateCustomerForm = ({
     shouldUnregister: true,
   })
 
+  const selectOptions = [
+    { label: 'Pagar Depois', value: 'pending', id: 1 },
+    { label: 'Pago', value: 'done', id: 2 },
+  ]
+
   const {
     watch,
     formState: { isValid },
@@ -51,14 +61,6 @@ export const CreateCustomerForm = ({
 
   const inputs: InputsProps = [
     {
-      placeholder: 'example@gmail.com',
-      register: form.register,
-      label: 'Email:',
-      name: 'email',
-      type: 'email',
-      id: 1,
-    },
-    {
       placeholder: 'Nome do cliente',
       register: form.register,
       label: 'Nome:',
@@ -67,20 +69,36 @@ export const CreateCustomerForm = ({
       id: 2,
     },
     {
+      placeholder: 'example@gmail.com',
+      register: form.register,
+      label: 'Email:',
+      name: 'email',
+      type: 'email',
+      id: 1,
+    },
+    {
+      placeholder: 'Status da compra:',
+      options: selectOptions,
+      register: form.register,
+      label: 'Status:',
+      name: 'status',
+      type: 'select',
+      id: 3,
+    },
+    {
       placeholder: 'Valor da compra',
       register: form.register,
       label: 'Valor:',
       name: 'amount',
       type: 'email',
-      id: 3,
+      id: 4,
     },
   ]
 
   useEffect(() => {
     const subscription = watch((value) => console.log(value))
-
     return () => subscription.unsubscribe()
-  }, [form.register, form.getValues, watch])
+  }, [form, watch])
 
   return (
     <Form {...form}>
@@ -91,7 +109,7 @@ export const CreateCustomerForm = ({
             name={input.name}
             control={form.control}
             render={({ field }) => (
-              <FormItem className="w-full gap-1 mt-5">
+              <FormItem className="w-full gap-1 mt-2">
                 <FormLabel
                   className="text-[#A1A1AA] font-sans tracking-wider font-semibold"
                   htmlFor={input.name}
@@ -101,7 +119,9 @@ export const CreateCustomerForm = ({
                 <FormControl>
                   <Input
                     placeholder={input.placeholder}
+                    onValueChange={field.onChange}
                     register={input.register}
+                    options={input.options}
                     type={input.type}
                     {...field}
                   />
