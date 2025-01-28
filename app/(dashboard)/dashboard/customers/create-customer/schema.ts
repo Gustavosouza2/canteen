@@ -7,6 +7,6 @@ export const CreateCustomerSchema = z.object({
   name: z
     .string()
     .min(3, { message: 'O nome precisa ter mais de 3 caracteres' }),
-  amount: z.number(),
+  amount: z.string(),
   status: z.string(),
 })

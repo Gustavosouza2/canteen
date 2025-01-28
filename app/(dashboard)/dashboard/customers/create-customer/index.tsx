@@ -29,7 +29,7 @@ export const CreateCustomerModal = ({
   return (
     <Modal
       description="adicione um cliente para ser possível realizar a cobrança"
-      title="ADICIONAR CLIENTE"
+      title="Registre um novo cliente"
       onClose={onClose}
       isOpen={isOpen}
     >

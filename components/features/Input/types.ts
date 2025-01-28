@@ -1,10 +1,11 @@
 import { type InputProps } from '@/components/ui/input'
+import { CurrencyInputOnChangeValues } from 'react-currency-input-field'
 import { type UseFormRegister } from 'react-hook-form'
 
 type InputProperty = InputProps & {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  type: 'email' | 'password' | 'select' | 'currency'
   register: UseFormRegister<any>
-  type: 'email' | 'password' | 'select'
   showPasswordTips?: boolean
   placeholder: string
 }
@@ -19,9 +20,19 @@ type SelectInputProps = {
 }
 
 type CurrencyInputProps = {
+  onChangeCurrency?: (
+    value: string,
+    name?: string,
+    values?: CurrencyInputOnChangeValues,
+  ) => void
   prefix?: string
+  intlConfig?: {
+    locale: string
+    currency: string
+  }
+  decimalSeparator?: string
+  groupSeparator?: string
 }
-
 export type AbstractInputsProps = SelectInputProps &
   CurrencyInputProps &
   InputProperty

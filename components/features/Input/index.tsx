@@ -1,5 +1,6 @@
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
 import { Input as InputShad } from '@/components/ui/input'
+import CurrencyInput from 'react-currency-input-field'
 import { useState } from 'react'
 
 import {
@@ -44,15 +45,36 @@ export const Input = ({
           </>
         )}
 
+        {type === 'currency' && (
+          <CurrencyInput
+            className="h-10 rounded px-3 text-sm w-full 
+          placeholder:text-[#A1A1AA] text-zinc-200
+          bg-zinc-900
+          border border-transparent
+          focus:border-zinc-700 
+          ring-0 focus:ring-0 focus:ring-offset-0
+          focus-visible:ring-0 focus-visible:ring-offset-0 
+          focus:outline-none focus-visible:outline-none"
+            intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
+            placeholder={placeholder}
+            {...register('amount')}
+            allowDecimals={true}
+            decimalSeparator=","
+            groupSeparator="."
+            prefix="R$"
+          />
+        )}
+
         {type === 'select' && (
           <Select onValueChange={onValueChange}>
             <SelectTrigger
-              className="w-full rounded h-10 text-[#A1A1AA]
+              className="w-full rounded h-10 text-zinc-200
+              ring-0 focus:ring-0
         border border-transparent
         focus:border-zinc-700 focus-visible:ring-0 focus-visible:ring-offset-0 
         bg-zinc-900"
             >
-              <SelectValue placeholder="Status" className="text-zinc-200" />
+              <SelectValue placeholder="Status" className="text-[#A1A1AA]" />
             </SelectTrigger>
             <SelectContent className="border-zinc-800 bg-zinc-900 text-zinc-200 rounded">
               {options?.map((option) => (

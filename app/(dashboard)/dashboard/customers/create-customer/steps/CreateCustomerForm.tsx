@@ -20,8 +20,8 @@ type CreateCustomerFormProps = {
 }
 
 type InputsProps = Array<{
+  type: 'email' | 'password' | 'select' | 'currency'
   name: 'email' | 'name' | 'amount' | 'status'
-  type: 'email' | 'password' | 'select'
   options?: Array<{
     label: string
     value: string
@@ -39,7 +39,7 @@ export const CreateCustomerForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const form = useForm({
-    defaultValues: { email: '', name: '', amount: 0, status: '' },
+    defaultValues: { email: '', name: '', amount: '', status: '' },
     resolver: zodResolver(CreateCustomerSchema),
     shouldUnregister: true,
   })
@@ -88,9 +88,9 @@ export const CreateCustomerForm = ({
     {
       placeholder: 'Valor da compra',
       register: form.register,
+      type: 'currency',
       label: 'Valor:',
       name: 'amount',
-      type: 'email',
       id: 4,
     },
   ]
@@ -118,6 +118,7 @@ export const CreateCustomerForm = ({
                 </FormLabel>
                 <FormControl>
                   <Input
+                    onChangeCurrency={field.onChange}
                     placeholder={input.placeholder}
                     onValueChange={field.onChange}
                     register={input.register}
@@ -133,7 +134,11 @@ export const CreateCustomerForm = ({
         ))}
 
         <div className="mt-10 flex-wrap flex">
-          <Button type="submit" isLoading={isLoading} disabled={!isValid}>
+          <Button
+            type="submit"
+            isLoading={isLoading}
+            disabled={!isValid || !watch('status') || !watch('amount')}
+          >
             Enviar
           </Button>
         </div>
