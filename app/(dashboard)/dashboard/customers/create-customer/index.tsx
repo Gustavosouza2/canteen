@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { CreateCustomerForm } from './steps/CreateCustomerForm'
 import { CreateMessage } from './steps/CreateMessage'
@@ -21,15 +21,27 @@ export const CreateCustomerModal = ({
 }: CreateCustomerModalProps) => {
   const [currentStep, setCurrentStep] = useState<StepKey>(0)
 
+  useEffect(() => {
+    if (!isOpen) setCurrentStep(0)
+  }, [isOpen, setCurrentStep])
+
   const steps: Steps = {
     0: <CreateCustomerForm setCurrentStep={setCurrentStep} />,
-    1: <CreateMessage />,
+    1: <CreateMessage onClose={onClose} />,
   }
 
   return (
     <Modal
-      description="adicione um cliente para ser possível realizar a cobrança"
-      title="Registre um novo cliente"
+      description={
+        currentStep === 0
+          ? 'adicione um cliente para ser possível realizar a cobrança'
+          : 'volte para a lista de clientes'
+      }
+      title={
+        currentStep === 0
+          ? 'Registre um novo cliente'
+          : 'Cliente registrado com sucesso'
+      }
       onClose={onClose}
       isOpen={isOpen}
     >

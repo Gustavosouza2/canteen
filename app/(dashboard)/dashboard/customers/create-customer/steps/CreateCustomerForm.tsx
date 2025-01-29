@@ -1,5 +1,8 @@
-import { SetStateAction, Dispatch, useEffect, useState } from 'react'
+import { SetStateAction, Dispatch, useState } from 'react'
 import { UseFormRegister, useForm } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useToast } from '@/hooks/ui/use-toast'
 import {
   FormControl,
   FormMessage,
@@ -8,9 +11,9 @@ import {
   FormItem,
   Form,
 } from '@/components/ui/form'
+import axios from 'axios'
 
 import { Button } from '@/components/features/Button'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '@/components/features/Input'
 import { CreateCustomerSchema } from '../schema'
 import { StepKey } from '..'
@@ -37,6 +40,9 @@ export const CreateCustomerForm = ({
   setCurrentStep,
 }: CreateCustomerFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const queryClient = useQueryClient()
+
+  const { toast } = useToast()
 
   const form = useForm({
     defaultValues: { email: '', name: '', amount: '', status: '' },
@@ -54,9 +60,35 @@ export const CreateCustomerForm = ({
     formState: { isValid },
   } = form
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setIsLoading(true)
-    setCurrentStep(1)
+
+    const formData = new FormData()
+    formData.append('amount', form.getValues('amount').toString().slice(3))
+    formData.append('status', form.getValues('status'))
+    formData.append('email', form.getValues('email'))
+    formData.append('name', form.getValues('name'))
+
+    await axios
+      .post('/api/dashboard/customer', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(async (response) => {
+        setCurrentStep(1)
+        await queryClient.invalidateQueries({ queryKey: ['User'] })
+        return response.data
+      })
+      .catch(() => {
+        toast({
+          title: 'Login Failed!',
+          description:
+            'The email or password you entered is incorrect. Please check your credentials and try again',
+          variant: 'destructive',
+        })
+      })
+      .finally(() => setIsLoading(false))
   }
 
   const inputs: InputsProps = [
@@ -95,11 +127,6 @@ export const CreateCustomerForm = ({
     },
   ]
 
-  useEffect(() => {
-    const subscription = watch((value) => console.log(value))
-    return () => subscription.unsubscribe()
-  }, [form, watch])
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -133,13 +160,13 @@ export const CreateCustomerForm = ({
           />
         ))}
 
-        <div className="mt-10 flex-wrap flex">
+        <div className="mt-16 flex-wrap flex">
           <Button
             type="submit"
             isLoading={isLoading}
             disabled={!isValid || !watch('status') || !watch('amount')}
           >
-            Enviar
+            ENVIAR
           </Button>
         </div>
       </form>
