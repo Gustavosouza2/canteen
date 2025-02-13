@@ -2,19 +2,18 @@
 
 import {
   TableHeader,
-  TableFooter,
   TableCell,
   TableBody,
   TableHead,
   TableRow,
   Table,
 } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Badge } from '@/components/ui/badge'
 
-import { Pagination } from '../Pagination'
-import { DataTableProps } from '@/types/table'
 import { parsedDataTable } from '@/utils/parsed-data-table'
+import { DataTableProps } from '@/types/table'
+import { Pagination } from '../Pagination'
 
 const BADGE_PROPS_COLOR: Record<string, JSX.Element> = {
   done: (
@@ -24,14 +23,14 @@ const BADGE_PROPS_COLOR: Record<string, JSX.Element> = {
   ),
   pending: (
     <Badge className="bg-zinc-800 text-orange-500  font-mono font-medium rounded-xl hover:bg-zinc-900">
-      Depois
+      Pendente
     </Badge>
   ),
 }
 
 export function DataTable<T extends Array<any>>({
   data,
-  footer,
+  items,
   columns,
   isLoading,
   totalPages,
@@ -72,25 +71,17 @@ export function DataTable<T extends Array<any>>({
                             key={`tr-${columnIndex}`}
                             onClick={onClickRow}
                           >
-                            {parsedDataTable(data, column, BADGE_PROPS_COLOR)}
+                            {parsedDataTable(
+                              BADGE_PROPS_COLOR,
+                              items,
+                              column,
+                              data,
+                            )}
                           </TableCell>
                         ))}
                       </TableRow>
                     ))}
                   </TableBody>
-
-                  {!!footer && (
-                    <TableFooter>
-                      <TableRow className="border-t  border-[#FFFA]/20">
-                        <TableCell colSpan={3} className="text-gray-400">
-                          Total
-                        </TableCell>
-                        <TableCell className="text-right text-gray-200">
-                          $2,500.00
-                        </TableCell>
-                      </TableRow>
-                    </TableFooter>
-                  )}
                 </>
               )}
             </Table>

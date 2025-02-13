@@ -32,3 +32,27 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: 'API Error' }, { status: 400 })
   }
 }
+
+export async function PATCH(request: Request) {
+  const client = getSupabaseBrowserClient()
+  const formData = await request.formData()
+
+  const amountEdit = Number(formData.get('amount')?.toString())
+  const statusEdit = formData.get('status')?.toString()
+  const userID = Number(formData.get('id')?.toString())
+
+  try {
+    const { data, error } = await client
+      .from('User')
+      .update({ status: statusEdit, amount: amountEdit })
+      .eq('id', userID)
+      .select('*')
+
+    if (error) throw error
+    console.log(error)
+    return NextResponse.json(data)
+  } catch (err) {
+    console.error(err)
+    return NextResponse.json({ message: 'API Error' }, { status: 400 })
+  }
+}

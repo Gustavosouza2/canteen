@@ -1,3 +1,4 @@
+import { ContextMenuItemsProps } from './context-menu-items'
 import { IconType } from 'react-icons'
 
 export interface TableColumn<T extends string> {
@@ -7,16 +8,17 @@ export interface TableColumn<T extends string> {
 }
 
 export interface DataTableProps<T extends Array<any>> {
+  items: ContextMenuItemsProps['items']
   onPageChange: (page: number) => void
   currentPage: number
-  totalPages: number
   isLoading?: boolean
+  totalPages: number
   title?: string
   data: T
   footer?: {
-    message: string
-    icon?: IconType
     onClick?: () => void
+    icon?: IconType
+    message: string
   }
   columns: Readonly<TableColumn<any>[]>
 }

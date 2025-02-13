@@ -42,10 +42,10 @@ export const Button = ({ isLoading, children, ...props }: ButtonProps) => {
     >
       <div className="absolute inset-0 overflow-hidden rounded">
         {isLoading && (
-          <div className="absolute inset-0 w-full h-full">
+          <div className="absolute inset-0 w-full h-full ">
             <Progress
               value={progress}
-              className="h-full w-full bg-transparent [&>div]:bg-white/20 [&>div]:transition-all [&>div]:duration-500"
+              className="w-full h-full rounded-none bg-transparent [&>div]:bg-white/20 [&>div]:transition-all [&>div]:duration-500"
             />
           </div>
         )}
