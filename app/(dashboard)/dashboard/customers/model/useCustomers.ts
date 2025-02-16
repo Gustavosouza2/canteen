@@ -1,10 +1,14 @@
 import useUsersQuery from '@/hooks/custom/useUsers'
+import { type Customer } from '@/types/customer'
+
 import { useEffect, useState } from 'react'
 
 const PAGE_SIZE = 10
 
 export const useCustomers = () => {
   const [page, setPage] = useState<number>(1)
+
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer>()
 
   const [isOpenCreate, setIsOpenCreate] = useState<boolean>(false)
   const handleIsOpenCreate = () => setIsOpenCreate(!isOpenCreate)
@@ -34,7 +38,9 @@ export const useCustomers = () => {
 
   return {
     customers: customers?.data || [],
+    setSelectedCustomer,
     handleIsOpenCreate,
+    selectedCustomer,
     handleIsOpenEdit,
     isOpenCreate,
     isOpenEdit,

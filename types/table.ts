@@ -8,7 +8,7 @@ export interface TableColumn<T extends string> {
 }
 
 export interface DataTableProps<T extends Array<any>> {
-  items: ContextMenuItemsProps['items']
+  items: (rowData: any) => ContextMenuItemsProps['items']
   onPageChange: (page: number) => void
   currentPage: number
   isLoading?: boolean

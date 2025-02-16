@@ -1,15 +1,18 @@
 import { Button } from '@/components/ui/button'
+import { MdEdit } from 'react-icons/md'
 
 import { DataTable } from '@/components/features/Table/Table'
 import { CreateCustomerModal } from '../create-customer'
-import { useCustomers } from '../model/useCustomers'
 import { EditCustomerModal } from '../edit-customer'
-import { MdEdit, MdDelete } from 'react-icons/md'
+import { useCustomers } from '../model/useCustomers'
+import { Customer } from '@/types/customer'
 
 export const customersView = (props: ReturnType<typeof useCustomers>) => {
   const {
+    setSelectedCustomer,
     handleIsOpenCreate,
     handleIsOpenEdit,
+    selectedCustomer,
     isOpenCreate,
     isOpenEdit,
     totalPages,
@@ -20,16 +23,21 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
     page,
   } = props
 
-  const ItemsContextMenu = [
+  const handleIsOpenEditModal = (customerId: number) => {
+    const customerToEdit = customers.find(
+      (customer) => customer.id === customerId,
+    )
+    if (customerToEdit) {
+      setSelectedCustomer(customerToEdit)
+      handleIsOpenEdit()
+    }
+  }
+
+  const ItemsContextMenu = (rowData: Customer) => [
     {
       icon: () => <MdEdit className="h-4 w-4 fill-current" />,
       text: 'Editar',
-      onOpen: () => handleIsOpenEdit(),
-    },
-    {
-      icon: () => <MdDelete className="h-4 w-4 fill-current" />,
-      text: 'Excluir',
-      onOpen: () => {},
+      onOpen: () => handleIsOpenEditModal(rowData.id),
     },
   ]
 
@@ -57,17 +65,21 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
       </div>
 
       <div>
-        <EditCustomerModal isOpen={isOpenEdit} onClose={handleIsOpenEdit} />
+        <EditCustomerModal
+          isOpen={isOpenEdit}
+          onClose={handleIsOpenEdit}
+          customer={selectedCustomer as Customer}
+        />
       </div>
 
       <DataTable
         onPageChange={(page) => setPage(page)}
         items={ItemsContextMenu}
-        data={customers as any}
         totalPages={totalPages}
         isLoading={isLoading}
         currentPage={page}
         columns={columns}
+        data={customers}
         title="Clientes"
       />
     </div>

@@ -38,19 +38,30 @@ export async function PATCH(request: Request) {
   const formData = await request.formData()
 
   const amountEdit = Number(formData.get('amount')?.toString())
+  const customerId = Number(formData.get('id')?.toString())
   const statusEdit = formData.get('status')?.toString()
-  const userID = Number(formData.get('id')?.toString())
 
   try {
-    const { data, error } = await client
+    const { error } = await client
       .from('User')
       .update({ status: statusEdit, amount: amountEdit })
-      .eq('id', userID)
-      .select('*')
+      .eq('id', customerId)
 
     if (error) throw error
-    console.log(error)
-    return NextResponse.json(data)
+
+    const { data: updatedUser, error: fetchError } = await client
+      .from('User')
+      .select('*')
+      .eq('id', customerId)
+      .single()
+
+    if (fetchError) throw fetchError
+
+    if (!updatedUser) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 })
+    }
+
+    return NextResponse.json(updatedUser)
   } catch (err) {
     console.error(err)
     return NextResponse.json({ message: 'API Error' }, { status: 400 })

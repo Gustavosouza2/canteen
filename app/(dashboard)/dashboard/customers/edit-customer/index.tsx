@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react'
 import { EditCustomerForm } from './steps/EditCustomerForm'
 import { Modal } from '@/components/features/Modal'
 import { EditMessage } from './steps/EditMessage'
+import { Customer } from '@/types/customer'
 
 type EditCustomerModalProps = {
   onClose: () => void
+  customer: Customer
   isOpen: boolean
-  id?: number
 }
 
 export type StepKey = 0 | 1
@@ -17,6 +18,7 @@ type Steps = {
 }
 
 export const EditCustomerModal = ({
+  customer,
   onClose,
   isOpen,
 }: EditCustomerModalProps) => {
@@ -27,7 +29,7 @@ export const EditCustomerModal = ({
   }, [isOpen, setCurrentStep])
 
   const steps: Steps = {
-    0: <EditCustomerForm setCurrentStep={setCurrentStep} />,
+    0: <EditCustomerForm setCurrentStep={setCurrentStep} customer={customer} />,
     1: <EditMessage onClose={onClose} />,
   }
 
@@ -41,7 +43,7 @@ export const EditCustomerModal = ({
       title={
         currentStep === 0
           ? 'Alterar valor total e status'
-          : 'Informações editadas com sucesso'
+          : 'Informações editadas'
       }
       onClose={onClose}
       isOpen={isOpen}

@@ -3,8 +3,8 @@ import { ContextMenuItemsProps } from '@/types/context-menu-items'
 import { TableColumn } from '@/types/table'
 
 export const parsedDataTable = (
+  items: (rowData: any) => ContextMenuItemsProps['items'],
   BADGE_PROPS_COLOR: Record<string, JSX.Element>,
-  items: ContextMenuItemsProps['items'],
   column: TableColumn<any>,
   data: any,
 ) => {
@@ -14,7 +14,7 @@ export const parsedDataTable = (
       currency: 'BRL',
     })
 
-  if (column.name === 'actions') return <ContextMenuItems items={items} />
+  if (column.name === 'actions') return <ContextMenuItems items={items(data)} />
 
   if (column.name === 'status') return BADGE_PROPS_COLOR[data[column.name]]
 

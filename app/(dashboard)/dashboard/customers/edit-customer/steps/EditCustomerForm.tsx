@@ -17,10 +17,12 @@ import { CreateCustomerSchema } from '../../create-customer/schema'
 import { useUserContext } from '@/context/userContext'
 import { Button } from '@/components/features/Button'
 import { Input } from '@/components/features/Input'
+import { Customer } from '@/types/customer'
 import { StepKey } from '..'
 
 type EditCustomerFormProps = {
   setCurrentStep: Dispatch<SetStateAction<StepKey>>
+  customer: Customer
 }
 
 type InputsProps = Array<{
@@ -37,10 +39,13 @@ type InputsProps = Array<{
   id: number
 }>
 
-export const EditCustomerForm = ({ setCurrentStep }: EditCustomerFormProps) => {
+export const EditCustomerForm = ({
+  setCurrentStep,
+  customer,
+}: EditCustomerFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const queryClient = useQueryClient()
-  const { userData, token } = useUserContext()
+  const { token } = useUserContext()
 
   const { toast } = useToast()
 
@@ -59,9 +64,9 @@ export const EditCustomerForm = ({ setCurrentStep }: EditCustomerFormProps) => {
     setIsLoading(true)
 
     const formData = new FormData()
-    formData.append('amount', form.getValues('amount').toString().slice(3))
+    formData.append('amount', form.getValues('amount').toString().slice(0, 3))
     formData.append('status', form.getValues('status'))
-    formData.append('id', userData?.id.toString() ?? '')
+    formData.append('id', customer?.id.toString() ?? '')
 
     await axios
       .patch('/api/dashboard/customer', formData, {
@@ -77,9 +82,8 @@ export const EditCustomerForm = ({ setCurrentStep }: EditCustomerFormProps) => {
       })
       .catch(() => {
         toast({
-          title: 'Login Failed!',
-          description:
-            'The email or password you entered is incorrect. Please check your credentials and try again',
+          title: 'Edit Failed!',
+          description: '',
           variant: 'destructive',
         })
       })

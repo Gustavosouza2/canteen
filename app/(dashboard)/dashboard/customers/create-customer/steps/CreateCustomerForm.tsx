@@ -166,7 +166,7 @@ export const CreateCustomerForm = ({
             isLoading={isLoading}
             disabled={!isValid || !watch('status') || !watch('amount')}
           >
-            ENVIAR
+            {isLoading ? 'ENVIANDO...' : 'ENVIAR'}
           </Button>
         </div>
       </form>

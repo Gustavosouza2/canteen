@@ -72,8 +72,8 @@ export function DataTable<T extends Array<any>>({
                             onClick={onClickRow}
                           >
                             {parsedDataTable(
-                              BADGE_PROPS_COLOR,
                               items,
+                              BADGE_PROPS_COLOR,
                               column,
                               data,
                             )}
