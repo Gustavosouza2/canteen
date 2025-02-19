@@ -26,7 +26,9 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-md mb-10 mt-5">Kuro</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-md mb-10 mt-5 flex justify-center tracking-widest">
+        Kuro
+      </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -41,7 +43,7 @@ export function NavMain({
                   <Link href={item.url}>
                     <div className="flex justify-between items-center gap-2">
                       {item.icon && <item.icon />}
-                      <span className="text-md font-mono text-zinc-300">
+                      <span className="text-[1.10rem] font-mono text-zinc-300">
                         {item.title}
                       </span>
                     </div>

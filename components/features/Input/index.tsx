@@ -18,7 +18,6 @@ export const Input = ({
   showPasswordTips,
   onValueChange,
   placeholder,
-  className,
   register,
   options,
   onChange,
@@ -94,9 +93,9 @@ export const Input = ({
           <>
             <div className="flex items-center justify-center">
               <InputShad
+                className="h-10 rounded placeholder:text-[#A1A1AA] text-zinc-200 border border-transparent focus-visible:ring-0 focus:border-zinc-700 bg-zinc-900"
                 type={showPassword ? 'text' : 'password'}
                 placeholder={placeholder}
-                className={className}
                 onChange={onChange}
                 {...props}
               />

@@ -3,7 +3,6 @@
 import { ReactNode, useState, useEffect } from 'react'
 
 import { HeaderLogin } from './Header'
-import { FooterLogin } from './Footer'
 
 export const LoginLayoutComponent = ({ children }: { children: ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false)
@@ -19,7 +18,6 @@ export const LoginLayoutComponent = ({ children }: { children: ReactNode }) => {
     <div className="flex flex-col h-screen">
       <HeaderLogin />
       <main className="flex-1">{children}</main>
-      <FooterLogin />
     </div>
   )
 }
