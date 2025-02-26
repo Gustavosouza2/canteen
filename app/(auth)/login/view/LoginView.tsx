@@ -78,7 +78,7 @@ export const LoginView = (props: ReturnType<typeof useLogin>) => {
           className="relative z-10 space-y-6 bg-transparent backdrop-blur-sm flex flex-col items-center justify-center rounded-lg md:p-16 p-11"
         >
           <div className="flex flex-col items-start justify-items-start justify-between font-mono mb-10">
-            <h1 className="md:text-4xl text-xl tracking-widest font-light text-zinc-300 mb-2 flex items-center w-max animate-fade animate-once animate-duration-1000">
+            <h1 className="md:text-4xl text-xl tracking-widest font-semibold text-zinc-300 mb-2 flex items-center w-max animate-fade animate-once animate-duration-1000">
               BEM VINDO DE VOLTA
             </h1>
             <p className="text-md text-[#A1A1AA] font-mono font-extralight opacity-100 animate-fade animate-once animate-duration-1000 text-center">

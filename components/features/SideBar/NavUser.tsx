@@ -34,11 +34,13 @@ export const AvatarComponent = () => {
 
 export function NavUser({
   user,
+  logout,
 }: {
   user: {
     name: string
     email: string
   }
+  logout: () => Promise<void>
 }) {
   const { isMobile } = useSidebar()
 
@@ -84,7 +86,11 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              disabled
+              onClick={() => logout()}
+              className="cursor-pointer"
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

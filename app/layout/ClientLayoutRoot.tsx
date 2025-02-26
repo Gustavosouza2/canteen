@@ -3,15 +3,16 @@
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { Cookies, CookiesProvider } from 'react-cookie'
 import { Toaster } from '@/components/ui/toaster'
+import { usePathname } from 'next/navigation'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 
 import { ReactQueryClientProvider } from '@/services/query/QueryClientProvider'
-import AppSidebar from '@/components/features/SideBar'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { UserContextProvider, useUserContext } from '@/context/userContext'
 import { useMobile } from '@/hooks/custom/useCustomMobile'
-import { UserContextProvider } from '@/context/userContext'
 import { CustomerIcon, HomeIcon } from '@/assets/icons'
-import { usePathname } from 'next/navigation'
+import AppSidebar from '@/components/features/SideBar'
 import '../styles/globals.css'
 
 export default function ClientLayoutRoot({
@@ -19,11 +20,19 @@ export default function ClientLayoutRoot({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const supabase = createClientComponentClient()
+  const { handleLogout } = useUserContext()
+
   const isMobile = useMobile()
   const cookies = new Cookies()
   const pathname = usePathname()
   const user = cookies.get('user')
   const token = cookies.get('token')
+
+  const onLogout = async () => {
+    await supabase.auth.signOut().then(() => handleLogout())
+    console.log('disparouuu')
+  }
 
   const items = [
     {
@@ -51,7 +60,11 @@ export default function ClientLayoutRoot({
               <SidebarProvider>
                 {pathname !== '/login' && (
                   <>
-                    <AppSidebar navItems={items} user={user} />
+                    <AppSidebar
+                      logout={onLogout}
+                      navItems={items}
+                      user={user}
+                    />
                     {isMobile ? null : (
                       <SidebarTrigger className="mt-5 rounded ml-5 w-5 h-5" />
                     )}
