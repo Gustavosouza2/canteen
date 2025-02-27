@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { MdEdit } from 'react-icons/md'
 
-import { DataTable } from '../../../../../components/features/Table/Table'
 import { CreateCustomerModal } from '../create-customer'
+import { DataTable } from '@/components/features/Table'
 import { EditCustomerModal } from '../edit-customer'
 import { useCustomers } from '../model/useCustomers'
 import { Customer } from '@/types/customer'
