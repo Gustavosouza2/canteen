@@ -25,7 +25,7 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
 
   const handleIsOpenEditModal = (customerId: number) => {
     const customerToEdit = customers.find(
-      (customer) => customer.id === customerId,
+      (customer: Customer) => customer.id === customerId,
     )
     if (customerToEdit) {
       setSelectedCustomer(customerToEdit)
@@ -49,11 +49,7 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
         </h1>
 
         <div>
-          <Button
-            variant="secondary"
-            className="rounded-xl mb-5"
-            onClick={handleIsOpenCreate}
-          >
+          <Button className="rounded-xl mb-5" onClick={handleIsOpenCreate}>
             Novo Cliente
           </Button>
         </div>
