@@ -27,7 +27,7 @@ export const AvatarComponent = () => {
         height={15}
         width={15}
       />
-      <AvatarFallback>GS</AvatarFallback>
+      <AvatarFallback>Admin</AvatarFallback>
     </Avatar>
   )
 }
@@ -92,7 +92,7 @@ export function NavUser({
               className="cursor-pointer"
             >
               <LogOut />
-              Log out
+              Sair (Em breve!)
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

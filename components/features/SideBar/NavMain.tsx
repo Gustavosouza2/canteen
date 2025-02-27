@@ -8,13 +8,17 @@ import {
   SidebarGroup,
   SidebarMenu,
 } from '@/components/ui/sidebar'
+import Image from 'next/image'
 import Link from 'next/link'
+
+import Logo from '../../../assets/images/logo.png'
 
 export function NavMain({
   items,
 }: {
   items: {
     icon?: () => JSX.Element
+    isDisabled?: boolean
     isActive?: boolean
     title: string
     url: string
@@ -27,7 +31,7 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-md mb-10 mt-5 flex justify-center tracking-widest">
-        Kuro
+        <Image src={Logo} alt="logo" height={40} width={40} quality={100} />
       </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
@@ -35,6 +39,7 @@ export function NavMain({
             key={item.title}
             asChild
             defaultOpen={item.isActive}
+            disabled={item.isDisabled === true}
             className="group/collapsible text-md"
           >
             <SidebarMenuItem>
@@ -43,7 +48,7 @@ export function NavMain({
                   <Link href={item.url}>
                     <div className="flex justify-between items-center gap-2">
                       {item.icon && <item.icon />}
-                      <span className="text-[1.10rem] font-mono text-zinc-300">
+                      <span className="text-[0.9rem] font-mono text-zinc-300">
                         {item.title}
                       </span>
                     </div>

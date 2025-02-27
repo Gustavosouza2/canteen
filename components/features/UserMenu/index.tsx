@@ -1,11 +1,11 @@
 import { ChevronDown, LogOut } from 'lucide-react'
+import { Button } from '../../ui/button'
+import Link from 'next/link'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '../../ui/button'
-import Link from 'next/link'
 
 interface UserMenuProps {
   name: string | null
@@ -42,13 +42,13 @@ export const UserMenu = ({ email, name }: UserMenuProps) => {
             </p>
           </div>
 
-          <div className="flex row items-center gap-2 mt-2">
+          <div className="flex row items-center gap-2 mt-2" aria-disabled>
             <LogOut className="w-4 h-4 text-[#fafafa]" />
             <Link
-              href="/login"
+              href=""
               className="text-[#fafafa] text-sm font-mono font-bold"
             >
-              Log out
+              Sair (Em breve!)
             </Link>
           </div>
         </div>

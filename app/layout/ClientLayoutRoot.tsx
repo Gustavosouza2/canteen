@@ -10,8 +10,8 @@ import { GeistSans } from 'geist/font/sans'
 import { ReactQueryClientProvider } from '@/services/query/QueryClientProvider'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { UserContextProvider, useUserContext } from '@/context/userContext'
+import { CustomerIcon, HomeIcon, OrdersIcon } from '@/assets/icons'
 import { useMobile } from '@/hooks/custom/useCustomMobile'
-import { CustomerIcon, HomeIcon } from '@/assets/icons'
 import AppSidebar from '@/components/features/SideBar'
 import '../styles/globals.css'
 
@@ -31,7 +31,6 @@ export default function ClientLayoutRoot({
 
   const onLogout = async () => {
     await supabase.auth.signOut().then(() => handleLogout())
-    console.log('disparouuu')
   }
 
   const items = [
@@ -44,6 +43,13 @@ export default function ClientLayoutRoot({
       title: 'Clientes',
       url: '/dashboard/customers',
       icon: CustomerIcon,
+    },
+
+    {
+      title: 'Pedidos',
+      url: '/dashboard/orders',
+      icon: OrdersIcon,
+      isDisabled: true,
     },
   ]
 
