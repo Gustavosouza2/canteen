@@ -35,8 +35,8 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
 
   const ItemsContextMenu = (rowData: Customer) => [
     {
-      icon: () => <MdEdit className="h-4 w-4 fill-current" />,
       text: 'Editar',
+      icon: () => <MdEdit className="h-4 w-4 fill-current" />,
       onOpen: () => handleIsOpenEditModal(rowData.id),
     },
   ]
