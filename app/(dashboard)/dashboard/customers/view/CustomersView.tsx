@@ -49,7 +49,11 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
         </h1>
 
         <div>
-          <Button className="rounded-xl mb-5" onClick={handleIsOpenCreate}>
+          <Button
+            className="rounded-xl mb-5"
+            onClick={handleIsOpenCreate}
+            variant="secondary"
+          >
             Novo Cliente
           </Button>
         </div>
