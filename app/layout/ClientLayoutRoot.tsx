@@ -5,7 +5,6 @@ import { Cookies, CookiesProvider } from 'react-cookie'
 import { Toaster } from '@/components/ui/toaster'
 import { usePathname } from 'next/navigation'
 import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
 
 import { ReactQueryClientProvider } from '@/services/query/QueryClientProvider'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -59,7 +58,7 @@ export default function ClientLayoutRoot({
         <ReactQueryClientProvider>
           <html lang="en">
             <body
-              className={`${GeistSans.className} ${GeistMono.className} bg-[#0F0F10] flex w-screen h-screen overflow-hidden`}
+              className={`${GeistMono.className} bg-[#0F0F10] flex w-screen h-screen overflow-hidden`}
             >
               <Toaster />
 

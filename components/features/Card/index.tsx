@@ -27,7 +27,7 @@ export const Card = ({ data, isLoading }: CardMapProps) => {
           key={index}
         >
           <CardHeader>
-            <CardTitle className="text-[#D1D1D2] font-mono text-md whitespace-normal tracking-wide">
+            <CardTitle className="text-[#D1D1D2] text-md whitespace-normal tracking-wide">
               {item.title}
             </CardTitle>
             <p className="text-[#D1D1D2] text-2xl font-bold whitespace-normal">
