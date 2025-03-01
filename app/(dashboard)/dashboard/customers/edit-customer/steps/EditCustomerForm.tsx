@@ -64,7 +64,7 @@ export const EditCustomerForm = ({
     setIsLoading(true)
 
     const formData = new FormData()
-    formData.append('amount', form.getValues('amount').toString().slice(0, 3))
+    formData.append('amount', form.getValues('amount').toString().slice(3))
     formData.append('status', form.getValues('status'))
     formData.append('id', customer?.id.toString() ?? '')
 

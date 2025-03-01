@@ -133,7 +133,7 @@ export const LoginView = (props: ReturnType<typeof useLogin>) => {
             )}
           />
           <Button disabled={!isValid} type="submit" isLoading={isPending}>
-            {isPending ? 'ENTRANDO' : 'ENTRAR'}
+            {isPending ? 'ENTRANDO...' : 'ENTRAR'}
           </Button>
         </form>
       </Form>

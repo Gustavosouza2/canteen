@@ -75,7 +75,7 @@ export default function ClientLayoutRoot({
                     )}
                   </>
                 )}
-                {children}
+                <div className="flex-1">{children}</div>
               </SidebarProvider>
             </body>
           </html>
