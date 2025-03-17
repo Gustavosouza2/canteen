@@ -6,6 +6,8 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,7 +24,6 @@
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -30,9 +31,15 @@
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    font-family: var(--font-sans);
+  }
+
+  code,
+  pre {
+    font-family: var(--font-mono);
+  }
 }
-
-
 
 @layer base {
   :root {

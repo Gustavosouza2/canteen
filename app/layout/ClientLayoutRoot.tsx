@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { Cookies, CookiesProvider } from 'react-cookie'
 import { Toaster } from '@/components/ui/toaster'
 import { usePathname } from 'next/navigation'
+import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 
 import { ReactQueryClientProvider } from '@/services/query/QueryClientProvider'
@@ -56,10 +57,11 @@ export default function ClientLayoutRoot({
     <CookiesProvider>
       <UserContextProvider token={token} user={user}>
         <ReactQueryClientProvider>
-          <html lang="en">
-            <body
-              className={`${GeistMono.className} bg-[#0F0F10] flex w-screen h-screen overflow-hidden`}
-            >
+          <html
+            lang="en"
+            className={`${GeistSans.className} ${GeistMono.className}`}
+          >
+            <body className=" bg-[#0F0F10] flex w-screen h-screen overflow-hidden">
               <Toaster />
 
               <SidebarProvider>

@@ -1,7 +1,8 @@
 export interface Customer {
-  id: number
-  email: string
-  amount: number
-  name: string
+  created_at: string
   status: string
+  amount: number
+  email: string
+  name: string
+  id: number
 }

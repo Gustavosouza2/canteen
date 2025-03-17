@@ -82,8 +82,9 @@ export const EditCustomerForm = ({
       })
       .catch(() => {
         toast({
-          title: 'Edit Failed!',
-          description: '',
+          title: 'Algo deu errado!',
+          description:
+            'Erro ao editar os dados do cliente, por favor, tente novamente!',
           variant: 'destructive',
         })
       })

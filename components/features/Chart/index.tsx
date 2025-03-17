@@ -1,8 +1,9 @@
 'use client'
 
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
-import { format, subMonths } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+
 import {
   CardDescription,
   CardContent,
@@ -18,19 +19,45 @@ import {
 
 import { capitalizeFirstLetter } from '@/utils/capitalize'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Customer } from '@/types/customer'
 
 type ChartProps = {
   isLoading: boolean
+  data: Customer[]
 }
 
-const chartData = [
-  { month: 'Agosto', desktop: 305 },
-  { month: 'Setembro', desktop: 237 },
-  { month: 'Outubro', desktop: 73 },
-  { month: 'Novembro', desktop: 209 },
-  { month: 'Dezembro', desktop: 214 },
-  { month: 'Janeiro', desktop: 214 },
-]
+const processDataByMonth = (data: ChartProps['data']) => {
+  const monthlyTotals: Record<string, number> = {}
+
+  data?.forEach((item) => {
+    const date = new Date(item.created_at)
+    const monthKey = format(date, 'MM-yyyy')
+
+    if (!monthlyTotals[monthKey]) {
+      monthlyTotals[monthKey] = 0
+    }
+    monthlyTotals[monthKey] += item.amount
+  })
+
+  return Object.entries(monthlyTotals)
+    .map(([monthKey, total]) => {
+      const [month, year] = monthKey.split('-')
+      const date = parse(`${year}-${month}-01`, 'yyyy-MM-dd', new Date())
+      const monthName = capitalizeFirstLetter(
+        format(date, 'MMMM', { locale: ptBR }),
+      )
+
+      return {
+        month: monthName,
+        desktop: total,
+      }
+    })
+    .sort((a, b) => {
+      const dateA = parse(a.month, 'MMMM', new Date(), { locale: ptBR })
+      const dateB = parse(b.month, 'MMMM', new Date(), { locale: ptBR })
+      return dateA.getTime() - dateB.getTime()
+    })
+}
 
 const chartConfig = {
   desktop: {
@@ -40,10 +67,9 @@ const chartConfig = {
 }
 
 const currentMonth = format(new Date(), 'MMMM yyyy', { locale: ptBR })
-const subMonth = subMonths(new Date(), 5)
-const formattedMonth = format(subMonth, 'LLLL', { locale: ptBR })
 
-export const Chart = ({ isLoading }: ChartProps) => {
+export const Chart = ({ isLoading, data }: ChartProps) => {
+  const chartData = processDataByMonth(data)
   return (
     <>
       {isLoading ? (
@@ -53,7 +79,6 @@ export const Chart = ({ isLoading }: ChartProps) => {
           <CardHeader className="pb-2">
             <CardTitle className="text-[#D1D1D2]">Situação Mensal</CardTitle>
             <CardDescription className="text-[#A1A1AA]">
-              {capitalizeFirstLetter(formattedMonth)} -{' '}
               {capitalizeFirstLetter(currentMonth)}
             </CardDescription>
           </CardHeader>

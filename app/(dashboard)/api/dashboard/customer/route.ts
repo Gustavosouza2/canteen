@@ -6,6 +6,7 @@ export async function POST(request: Request) {
   const client = getSupabaseBrowserClient()
   const formData = await request.formData()
 
+  const createdAt = formData.get('created_at')?.toString()
   const amount = Number(formData.get('amount')?.toString())
   const status = formData.get('status')?.toString()
   const email = formData.get('email')?.toString()
@@ -16,10 +17,11 @@ export async function POST(request: Request) {
       .from('User')
       .insert([
         {
-          email,
-          name,
+          createdAt,
           amount,
           status,
+          name,
+          email,
         },
       ])
       .select('*')

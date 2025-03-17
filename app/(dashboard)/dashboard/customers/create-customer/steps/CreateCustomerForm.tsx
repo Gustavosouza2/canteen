@@ -65,6 +65,7 @@ export const CreateCustomerForm = ({
 
     const formData = new FormData()
     formData.append('amount', form.getValues('amount').toString().slice(3))
+    formData.append('created_at', new Date().toString())
     formData.append('status', form.getValues('status'))
     formData.append('email', form.getValues('email'))
     formData.append('name', form.getValues('name'))
@@ -82,9 +83,8 @@ export const CreateCustomerForm = ({
       })
       .catch(() => {
         toast({
-          title: 'Login Failed!',
-          description:
-            'The email or password you entered is incorrect. Please check your credentials and try again',
+          title: 'Algo deu errado!',
+          description: 'Erro ao criar um cliente, por favor, tente novamente!',
           variant: 'destructive',
         })
       })

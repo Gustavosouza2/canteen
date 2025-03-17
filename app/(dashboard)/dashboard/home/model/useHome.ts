@@ -1,3 +1,4 @@
+import { CardProps } from '@/components/features/Card'
 import { useUserContext } from '@/context/userContext'
 import useUsersQuery from '@/hooks/custom/useUsers'
 
@@ -14,24 +15,37 @@ export const useHome = () => {
       return acc + currAmount
     }, 0)
 
-  const cardItems = [
+  const cardItems: CardProps[] = [
     {
-      info: `Bem vindo de volta ${userData?.email?.slice(0, 7) || 'Admin'}!`,
+      title: `Bem vindo de volta ${userData?.email?.slice(0, 7) || 'Admin'}!`,
+      typeInfo: 'decrypted',
+      type: 'string',
     },
     {
-      title: 'Clientes',
-      info: customers?.data?.length.toString(),
+      info: customers?.data?.length.toString() ?? '',
       description: 'Total de clientes adicionados',
+      title: 'Clientes',
+      typeInfo: 'text',
+      type: 'number',
     },
     {
+      description: 'Número total de vendas realizadas',
       title: 'Valor total de vendas',
-      info: `R$${totalAmount}`,
-      description: 'Numero total de vendas realizadas',
+      info:
+        totalAmount
+          ?.toLocaleString('pt-br', {
+            style: 'currency',
+            currency: 'BRL',
+          })
+          .slice(3, 6) ?? '',
+      typeInfo: 'text',
+      type: 'number',
     },
   ]
 
   return {
     cardItems,
+    customers,
     isLoading,
   }
 }

@@ -49,9 +49,9 @@ export const useLogin = () => {
           })
           .catch(() => {
             toast({
-              title: 'Login Failed!',
+              title: 'O Login falhou!',
               description:
-                'The email or password you entered is incorrect. Please check your credentials and try again',
+                'O Email ou a senha estão incorretos, tente novamente!',
               variant: 'default',
             })
           })
