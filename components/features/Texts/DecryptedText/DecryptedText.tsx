@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import { useEffect, useState, useRef, ReactNode } from 'react'
 import { motion } from 'framer-motion'
 
@@ -58,7 +55,7 @@ export default function DecryptedText({
   const containerRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
-    let interval: number
+    let interval: number | NodeJS.Timeout
     let currentIteration = 0
 
     const getNextIndex = (revealedSet: Set<number>): number => {
@@ -144,7 +141,6 @@ export default function DecryptedText({
 
     if (isHovering) {
       setIsScrambling(true)
-
       interval = setInterval(() => {
         setRevealedIndices((prevRevealed) => {
           if (sequential) {
