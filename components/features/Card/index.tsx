@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import DecryptedText from '../Texts/DecryptedText/DecryptedText'
+import SplitText from '../Texts/SplitText/SplitText'
 import CountUp from '../Texts/CountNumber/CountNumber'
 
 export interface CardProps {
@@ -39,13 +39,18 @@ export const Card = ({ data, isLoading }: CardMapProps) => {
               </CardTitle>
             ) : (
               <div className="text-[#D1D1D2] font-mono text-lg font-bold whitespace-normal">
-                <DecryptedText
-                  characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?123456$#*&"
-                  revealDirection="center"
+                <SplitText
                   text={item.title ?? ''}
-                  maxIterations={20}
-                  animateOn="view"
-                  speed={100}
+                  className="text-2xl font-semibold text-center"
+                  delay={50}
+                  animationFrom={{
+                    opacity: 0,
+                    transform: 'translate3d(0,50px,0)',
+                  }}
+                  animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
+                  easing={(t: number) => t}
+                  threshold={0.2}
+                  rootMargin="-50px"
                 />
               </div>
             )}
