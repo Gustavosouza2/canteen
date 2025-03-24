@@ -20,7 +20,7 @@ export const Button = ({ isLoading, children, ...props }: ButtonProps) => {
       const timer = setInterval(() => {
         setProgress((oldProgress) => {
           if (oldProgress === 100) {
-            return 0
+            return 100
           }
           return Math.min(oldProgress + 10, 100)
         })

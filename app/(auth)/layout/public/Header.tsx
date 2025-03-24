@@ -4,9 +4,9 @@ import Logo from '../../../../assets/images/logo.png'
 
 export const HeaderLogin = () => {
   return (
-    <header className="flex z-10 fixed w-full justify-between items-center p-2 bg-transparent">
-      <div className="flex ml-28 mt-6">
-        <Image src={Logo} alt="logo" height={50} width={50} quality={100} />
+    <header className="flex z-20 fixed w-full h-16 border-b-2 border-[#252427] justify-between items-center p-2 bg-[#121113]">
+      <div className="flex md:ml-28 ml-10 mt-2">
+        <Image src={Logo} alt="logo" height={40} width={40} quality={100} />
       </div>
     </header>
   )

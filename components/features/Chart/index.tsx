@@ -30,8 +30,7 @@ const processDataByMonth = (data: ChartProps['data']) => {
   const monthlyTotals: Record<string, number> = {}
 
   data?.forEach((item) => {
-    const date = new Date(item.created_at)
-    const monthKey = format(date, 'MM-yyyy')
+    const monthKey = format(item.createdAt, 'MM-yyyy')
 
     if (!monthlyTotals[monthKey]) {
       monthlyTotals[monthKey] = 0

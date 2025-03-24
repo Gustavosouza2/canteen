@@ -1,5 +1,5 @@
 export interface Customer {
-  created_at: string
+  createdAt: string
   status: string
   amount: number
   email: string

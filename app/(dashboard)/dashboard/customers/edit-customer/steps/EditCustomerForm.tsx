@@ -144,7 +144,7 @@ export const EditCustomerForm = ({
           />
         ))}
 
-        <div className="mt-56 flex-wrap flex">
+        <div className="mt-44 flex-wrap flex">
           <Button type="submit" onClick={onSubmit} isLoading={isLoading}>
             {isLoading ? 'ENVIANDO...' : 'ENVIAR'}
           </Button>
