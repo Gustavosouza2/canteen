@@ -60,15 +60,22 @@ export const CreateCustomerForm = ({
     formState: { isValid },
   } = form
 
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  const day = date.getDay()
+
+  const formattedDate = `${year}-${month}-${day}`
+
   const onSubmit = async () => {
     setIsLoading(true)
 
     const formData = new FormData()
     formData.append('amount', form.getValues('amount').toString().slice(3))
-    formData.append('created_at', new Date().toString())
     formData.append('status', form.getValues('status'))
     formData.append('email', form.getValues('email'))
     formData.append('name', form.getValues('name'))
+    formData.append('createdAt', formattedDate)
 
     await axios
       .post('/api/dashboard/customer', formData, {

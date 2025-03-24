@@ -10,7 +10,7 @@ export const CreateMessage = ({ onClose }: { onClose: VoidFunction }) => {
         <Image alt="" src={SuccessImage} height={230} width={230} />
       </div>
 
-      <div className="mt-28 w-full">
+      <div className="mt-20 w-full">
         <Button type="button" onClick={onClose}>
           FECHAR
         </Button>
