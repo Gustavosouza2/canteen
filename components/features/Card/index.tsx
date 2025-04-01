@@ -29,7 +29,7 @@ export const Card = ({ data, isLoading }: CardMapProps) => {
         <Skeleton className="w-[330px] h-36 rounded-xl " />
       ) : (
         <CardShadcn
-          className="w-full rounded-xl border border-[#FFFA]/10 bg-[#0E0E10]"
+          className="md:w-[21rem] w-full rounded-xl border border-[#FFFA]/10 bg-[#0E0E10]"
           key={index}
         >
           <CardHeader>

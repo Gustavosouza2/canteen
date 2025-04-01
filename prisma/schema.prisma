@@ -10,8 +10,9 @@ datasource db {
 
 model User {
   id       Int    @id @default(autoincrement()) 
+  createdAt  DateTime @default(now())
   name     String
   email    String
   status   String
-  amount   Int
+  amount   Int 
   }
