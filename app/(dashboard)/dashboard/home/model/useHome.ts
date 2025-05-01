@@ -1,13 +1,13 @@
 import { CardProps } from '@/components/features/Card'
 import { useUserContext } from '@/context/userContext'
-import useUsersQuery from '@/hooks/custom/useUsers'
+import { useCustomersList } from '@/hooks/custom/useCustomers'
 
 const PAGE_SIZE = 10
 
 export const useHome = () => {
   const { userData } = useUserContext()
 
-  const { data: customers, isLoading } = useUsersQuery(1, PAGE_SIZE)
+  const { data: customers, isLoading } = useCustomersList(1, PAGE_SIZE)
 
   const totalAmount = customers?.data
     ?.map((customer) => customer?.amount)

@@ -6,3 +6,8 @@ export interface Customer {
   name: string
   id: number
 }
+
+export type CustomersResponse = {
+  data: Customer[]
+  count: number
+}

@@ -1,4 +1,4 @@
-import useUsersQuery from '@/hooks/custom/useUsers'
+import { useCustomersList } from '@/hooks/custom/useCustomers'
 import { type Customer } from '@/types/customer'
 
 import { useEffect, useState } from 'react'
@@ -16,7 +16,7 @@ export const useCustomers = () => {
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
   const handleIsOpenEdit = () => setIsOpenEdit(!isOpenEdit)
 
-  const { data: customers, isLoading } = useUsersQuery(page, PAGE_SIZE)
+  const { data: customers, isLoading } = useCustomersList(page, PAGE_SIZE)
 
   const totalPages = customers?.count
     ? Math.max(1, Math.ceil(customers.count / PAGE_SIZE))

@@ -1,6 +1,66 @@
+import arcjet, { shield } from '@arcjet/next'
 import { NextResponse } from 'next/server'
 
 import { getSupabaseBrowserClient } from '@/lib/supabase'
+import useSupabase from '@/hooks/custom/useSupabase'
+
+const arcJet = arcjet({
+  key: process.env.ARCJET_KEY!,
+  rules: [
+    shield({
+      mode: 'LIVE',
+    }),
+  ],
+})
+export async function GET(request: Request) {
+  const decision = await arcJet.protect(request)
+  const client = useSupabase()
+  const searchParams = new URLSearchParams(request.url)
+
+  const pageSize = Number(searchParams.get('pageSize') || 10)
+  const page = Number(searchParams.get('page') || 1)
+
+  if (decision.isDenied()) {
+    return NextResponse.json(
+      { error: 'Unauthorized', reason: decision.reason },
+      { status: 401 },
+    )
+  }
+
+  if (decision.isAllowed()) {
+    const { count } = await client
+      .from('User')
+      .select('*', { count: 'exact', head: true })
+
+    if (!count) {
+      return { data: [], count: 0 }
+    }
+
+    const totalPages = Math.ceil(count / pageSize)
+    const adjustedPage = Math.min(page, totalPages)
+    const from = (adjustedPage - 1) * pageSize
+    const to = from + pageSize - 1
+
+    try {
+      const { data, error } = await client
+        .from('User')
+        .select('*')
+        .range(from, to)
+        .order('id', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching users:', error)
+        throw error
+      }
+
+      return { data, count }
+    } catch (error) {
+      console.log(error)
+      console.error('Error in getUsers function:', error)
+      throw error
+    }
+  }
+}
 
 export async function POST(request: Request) {
   const client = getSupabaseBrowserClient()
