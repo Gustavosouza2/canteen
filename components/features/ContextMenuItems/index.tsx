@@ -1,4 +1,5 @@
 'use client'
+
 import { ContextMenuItemsProps } from '@/types/context-menu-items'
 import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 import { VscKebabVertical } from 'react-icons/vsc'
@@ -21,7 +22,7 @@ export const ContextMenuItems = ({ items }: ContextMenuItemsProps) => {
             onClick={item.onOpen}
             className="flex items-center gap-2 focus:outline-none hover:bg-zinc-900 w-full cursor-pointer"
           >
-            {item.icon()}
+            <div className="w-5 h-5 flex items-center ml-3">{item.icon()}</div>
             <span className="text-sm font-mono font-medium text-zinc-300">
               {item.text}
             </span>

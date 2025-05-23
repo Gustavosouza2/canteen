@@ -6,8 +6,14 @@ const PAGE_SIZE = 10
 
 export const useHome = () => {
   const { userData } = useUserContext()
+  const params = new URLSearchParams()
+  params.set('page', '1')
+  params.set('pageSize', PAGE_SIZE.toString())
 
-  const { data: customers, isLoading } = useCustomersList(1, PAGE_SIZE)
+  const page = Number(params.get('page'))
+  const pageSize = Number(params.get('pageSize'))
+
+  const { data: customers, isLoading } = useCustomersList(page, pageSize)
 
   const totalAmount = customers?.data
     ?.map((customer) => customer?.amount)

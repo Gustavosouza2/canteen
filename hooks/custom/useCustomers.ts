@@ -8,12 +8,8 @@ export const useCustomersList = (page: number, pageSize: number) => {
   const queryFn = async (): Promise<CustomersResponse> => {
     try {
       const res = await fetch(
-        `/api/dashboard/customer?page=${1}&pageSize=${10}`,
+        `/api/dashboard/customer?page=${page}&pageSize=${pageSize}`,
       )
-
-      if (!res.ok) {
-        throw new Error(`Failed to fetch users: ${res.statusText}`)
-      }
 
       const text = await res.text()
       if (!text) {
@@ -26,7 +22,7 @@ export const useCustomersList = (page: number, pageSize: number) => {
         count: response.count,
       }
     } catch (error) {
-      console.error('Error fetching users:', error)
+      console.error(error)
       throw error
     }
   }

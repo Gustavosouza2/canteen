@@ -167,7 +167,7 @@ export const CreateCustomerForm = ({
           />
         ))}
 
-        <div className="mt-16 flex-wrap flex">
+        <div className="mt-10 flex-wrap flex">
           <Button
             type="submit"
             isLoading={isLoading}

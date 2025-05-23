@@ -1,8 +1,6 @@
+import { NextResponse, type NextRequest } from 'next/server'
 import arcjet, { shield } from '@arcjet/next'
-import { NextResponse } from 'next/server'
-
-import { getSupabaseBrowserClient } from '@/lib/supabase'
-import useSupabase from '@/hooks/custom/useSupabase'
+import { PrismaClient } from '@prisma/client'
 
 const arcJet = arcjet({
   key: process.env.ARCJET_KEY!,
@@ -12,9 +10,11 @@ const arcJet = arcjet({
     }),
   ],
 })
-export async function GET(request: Request) {
+
+const prisma = new PrismaClient()
+
+export async function GET(request: NextRequest) {
   const decision = await arcJet.protect(request)
-  const client = useSupabase()
   const searchParams = new URLSearchParams(request.url)
 
   const pageSize = Number(searchParams.get('pageSize') || 10)
@@ -28,42 +28,40 @@ export async function GET(request: Request) {
   }
 
   if (decision.isAllowed()) {
-    const { count } = await client
-      .from('User')
-      .select('*', { count: 'exact', head: true })
-
-    if (!count) {
-      return { data: [], count: 0 }
-    }
-
-    const totalPages = Math.ceil(count / pageSize)
-    const adjustedPage = Math.min(page, totalPages)
-    const from = (adjustedPage - 1) * pageSize
-    const to = from + pageSize - 1
-
     try {
-      const { data, error } = await client
-        .from('User')
-        .select('*')
-        .range(from, to)
-        .order('id', { ascending: false })
+      const count = await prisma.user.count()
 
-      if (error) {
-        console.error('Error fetching users:', error)
-        throw error
+      if (!count) {
+        return NextResponse.json({ data: [], count: 0 })
       }
 
-      return { data, count }
+      const totalPages = Math.ceil(count / pageSize)
+      const adjustedPage = Math.min(page, totalPages)
+      const skip = (adjustedPage - 1) * pageSize
+
+      const data = await prisma.user.findMany({
+        skip,
+        take: pageSize,
+        orderBy: {
+          id: 'desc',
+        },
+      })
+
+      return NextResponse.json({ data, count })
     } catch (error) {
-      console.log(error)
-      console.error('Error in getUsers function:', error)
-      throw error
+      console.error(error)
+      return NextResponse.json(
+        {
+          error: 'Database error',
+          details: error instanceof Error ? error.message : 'Unknown error',
+        },
+        { status: 500 },
+      )
     }
   }
 }
 
-export async function POST(request: Request) {
-  const client = getSupabaseBrowserClient()
+export async function POST(request: NextRequest) {
   const formData = await request.formData()
 
   const createdAt = formData.get('created_at')?.toString()
@@ -72,31 +70,41 @@ export async function POST(request: Request) {
   const email = formData.get('email')?.toString()
   const name = formData.get('name')?.toString()
 
-  try {
-    const { data, error } = await client
-      .from('User')
-      .insert([
-        {
-          createdAt,
-          amount,
-          status,
-          name,
-          email,
-        },
-      ])
-      .select('*')
+  if (!name || !email) {
+    return NextResponse.json(
+      {
+        error: 'Validation error',
+        details: 'Name and email are required',
+      },
+      { status: 400 },
+    )
+  }
 
-    if (error) throw error
+  try {
+    const data = await prisma.user.create({
+      data: {
+        createdAt: createdAt ? new Date(createdAt) : new Date(),
+        amount,
+        status: status || 'pending',
+        name,
+        email,
+      },
+    })
 
     return NextResponse.json(data)
   } catch (err) {
     console.error(err)
-    return NextResponse.json({ message: 'API Error' }, { status: 400 })
+    return NextResponse.json(
+      {
+        error: 'Database error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 400 },
+    )
   }
 }
 
-export async function PATCH(request: Request) {
-  const client = getSupabaseBrowserClient()
+export async function PATCH(request: NextRequest) {
   const formData = await request.formData()
 
   const amountEdit = Number(formData.get('amount')?.toString())
@@ -104,20 +112,15 @@ export async function PATCH(request: Request) {
   const statusEdit = formData.get('status')?.toString()
 
   try {
-    const { error } = await client
-      .from('User')
-      .update({ status: statusEdit, amount: amountEdit })
-      .eq('id', customerId)
-
-    if (error) throw error
-
-    const { data: updatedUser, error: fetchError } = await client
-      .from('User')
-      .select('*')
-      .eq('id', customerId)
-      .single()
-
-    if (fetchError) throw fetchError
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: customerId,
+      },
+      data: {
+        status: statusEdit,
+        amount: amountEdit,
+      },
+    })
 
     if (!updatedUser) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 })
@@ -126,6 +129,12 @@ export async function PATCH(request: Request) {
     return NextResponse.json(updatedUser)
   } catch (err) {
     console.error(err)
-    return NextResponse.json({ message: 'API Error' }, { status: 400 })
+    return NextResponse.json(
+      {
+        error: 'Database error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 400 },
+    )
   }
 }

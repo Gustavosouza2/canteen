@@ -35,15 +35,15 @@ export const EditCustomerModal = ({
 
   return (
     <Modal
+      title={
+        currentStep === 0
+          ? 'Alterar valor total ou status'
+          : 'Informações editadas'
+      }
       description={
         currentStep === 0
           ? 'altere o status ou o valor total do pedido'
           : 'informações editadas, volte para a lista de clientes'
-      }
-      title={
-        currentStep === 0
-          ? 'Alterar valor total e status'
-          : 'Informações editadas'
       }
       onClose={onClose}
       isOpen={isOpen}
