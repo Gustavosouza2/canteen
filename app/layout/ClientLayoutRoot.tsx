@@ -1,6 +1,6 @@
 'use client'
 
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 import { Cookies, CookiesProvider } from 'react-cookie'
 import { Toaster } from '@/components/ui/toaster'
 import { usePathname } from 'next/navigation'
@@ -11,7 +11,6 @@ import { ReactQueryClientProvider } from '@/services/query/QueryClientProvider'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { UserContextProvider, useUserContext } from '@/context/userContext'
 import { CustomerIcon, HomeIcon, OrdersIcon } from '@/assets/icons'
-import { useMobile } from '@/hooks/custom/useCustomMobile'
 import AppSidebar from '@/components/features/SideBar'
 import '../styles/globals.css'
 
@@ -23,7 +22,6 @@ export default function ClientLayoutRoot({
   const supabase = createClientComponentClient()
   const { handleLogout } = useUserContext()
 
-  const isMobile = useMobile()
   const cookies = new Cookies()
   const pathname = usePathname()
   const user = cookies.get('user')
@@ -51,6 +49,12 @@ export default function ClientLayoutRoot({
       icon: OrdersIcon,
       isDisabled: true,
     },
+
+    {
+      title: 'Menu',
+      url: '/dashboard/menu',
+      icon: CustomerIcon,
+    },
   ]
 
   return (
@@ -72,12 +76,9 @@ export default function ClientLayoutRoot({
                       navItems={items}
                       user={user}
                     />
-                    {isMobile ? null : (
-                      <SidebarTrigger className="mt-5 rounded ml-5 w-5 h-5" />
-                    )}
                   </>
                 )}
-                <div className="flex-1">{children}</div>
+                {children}
               </SidebarProvider>
             </body>
           </html>

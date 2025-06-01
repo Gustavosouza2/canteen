@@ -42,7 +42,7 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
   ]
 
   return (
-    <div className="flex flex-col mt-36 md:mr-96 px-10">
+    <div className="flex flex-col mt-36 px-10 w-full">
       <div className="flex flex-row justify-between">
         <h1 className="text-gray-300 font-mono font-medium tracking-wide ml-5 mt-1">
           Clientes:
