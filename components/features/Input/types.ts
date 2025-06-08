@@ -4,7 +4,7 @@ import { type UseFormRegister } from 'react-hook-form'
 
 type InputProperty = InputProps & {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  type: 'email' | 'password' | 'select' | 'currency'
+  type: 'email' | 'password' | 'select' | 'currency' | 'text'
   register: UseFormRegister<any>
   showPasswordTips?: boolean
   placeholder: string

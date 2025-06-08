@@ -1,14 +1,16 @@
 import { MdRemove, MdAdd } from 'react-icons/md'
 
 import { CardMenuData } from '@/types/card-menu-items'
+import { Input } from '@/components/features/Input'
+import { UseFormRegister } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
 type MainCardMenuProps = {
   tempPrice: string
   item: CardMenuData
   isEditingPrice: boolean
   handlePriceSubmit: () => void
+  register: UseFormRegister<any>
   setTempPrice: (price: string) => void
   handleQuantityChange: (delta: number) => void
   setIsEditingPrice: (isEditing: boolean) => void
@@ -17,6 +19,7 @@ type MainCardMenuProps = {
 
 export const MainCardMenu = ({
   item,
+  register,
   tempPrice,
   setTempPrice,
   isEditingPrice,
@@ -31,15 +34,18 @@ export const MainCardMenu = ({
         <span className="text-sm text-muted-foreground">Preço:</span>
         {isEditingPrice ? (
           <Input
-            type="number"
-            value={tempPrice}
             onChange={(e) => setTempPrice(e.target.value)}
-            onBlur={handlePriceSubmit}
-            onKeyDown={handlePriceKeyDown}
             className="w-20 h-8 text-right"
+            onKeyDown={handlePriceKeyDown}
+            onBlur={handlePriceSubmit}
+            register={register}
+            placeholder="Preço"
+            value={tempPrice}
+            type="currency"
+            name="price"
             step="0.01"
-            min="0"
             autoFocus
+            min="0"
           />
         ) : (
           <button

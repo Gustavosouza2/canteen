@@ -1,13 +1,7 @@
 'use client'
 
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
-import { gsap } from 'gsap'
-import {
-  MdVisibilityOff,
-  MdContentCopy,
-  MdDelete,
-  MdEdit,
-} from 'react-icons/md'
+import { MdVisibilityOff, MdContentCopy, MdDelete } from 'react-icons/md'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { CardMenuData } from '@/types/card-menu-items'
@@ -16,6 +10,7 @@ import { FooterCardMenu } from './FooterCardMenu'
 import { HeaderCardMenu } from './HeaderCardMenu'
 import { MainCardMenu } from './MainCardMenu'
 import { TextCardMenu } from './TextCardMenu'
+import { useForm } from 'react-hook-form'
 
 type CardMenuProps = {
   fadeOut?: number
@@ -31,38 +26,21 @@ type CardMenuProps = {
 
 export const CardMenu = ({
   item,
-  onEdit,
   onDelete,
   className,
   onDuplicate,
   onUpdatePrice,
-  fadeOut = 0.6,
   onUpdateQuantity,
   onToggleAvailability,
 }: CardMenuProps) => {
-  const fadeRef = useRef<HTMLDivElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const [isEditingPrice, setIsEditingPrice] = useState(false)
   const [tempPrice, setTempPrice] = useState(item.price.toString())
+  const { register } = useForm()
 
-  const handleMove = (e: PointerEvent) => {
-    if (!rootRef.current || !fadeRef.current) return
-
-    const r = rootRef.current.getBoundingClientRect()
-    gsap.quickSetter(fadeRef.current, '--x', 'px')(e.clientX - r.left)
-    gsap.quickSetter(fadeRef.current, '--y', 'px')(e.clientY - r.top)
-    gsap.to(fadeRef.current, { opacity: 0, duration: 0.25, overwrite: true })
-  }
-
-  const handleLeave = () => {
-    if (!fadeRef.current) return
-
-    gsap.to(fadeRef.current, {
-      opacity: 1,
-      duration: fadeOut,
-      overwrite: true,
-    })
-  }
+  useEffect(() => {
+    setTempPrice(item.price.toString())
+  }, [item.price])
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = Math.max(0, item.quantity + delta)
@@ -90,11 +68,6 @@ export const CardMenu = ({
 
   const contextMenuItems = [
     {
-      label: 'Editar',
-      icon: () => <MdEdit className="h-4 w-4 fill-current" />,
-      onClick: () => onEdit?.(item),
-    },
-    {
       label: 'Duplicar',
       icon: () => <MdContentCopy className="h-4 w-4 fill-current" />,
       onClick: () => onDuplicate?.(item),
@@ -107,7 +80,8 @@ export const CardMenu = ({
   ]
 
   const getStatusColor = () => {
-    if (!item.isAvailable) return 'bg-transparent border-red-500/40'
+    if (!item.isAvailable || item.quantity === 0)
+      return 'bg-transparent border-red-500/40'
     return 'bg-transparent border-green-500/40'
   }
 
@@ -115,8 +89,6 @@ export const CardMenu = ({
     <TooltipProvider>
       <div
         ref={rootRef}
-        onPointerMove={handleMove}
-        onPointerLeave={handleLeave}
         className={`relative w-full h-full flex flex-wrap justify-center items-start gap-3 ${className}`}
       >
         <article
@@ -124,19 +96,6 @@ export const CardMenu = ({
             !item.isAvailable ? 'opacity-75' : ''
           }`}
         >
-          {/* Hover Effect */}
-          <div
-            ref={fadeRef}
-            className="absolute 
-            inset-0 pointer-events-none 
-            transition-opacity duration-500 
-            z-20 opacity-0 group-hover:opacity-100"
-            style={{
-              background:
-                'radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.1), transparent 70%)',
-            }}
-          />
-
           {/* Header Content */}
           <HeaderCardMenu item={item} items={contextMenuItems} />
 
@@ -161,6 +120,7 @@ export const CardMenu = ({
           {/* Main Content */}
           <MainCardMenu
             item={item}
+            register={register}
             tempPrice={tempPrice}
             setTempPrice={setTempPrice}
             isEditingPrice={isEditingPrice}

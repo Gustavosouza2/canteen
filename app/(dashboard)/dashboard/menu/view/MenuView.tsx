@@ -17,6 +17,7 @@ export const MenuView = () => {
       quantity: 15,
       category: 'Hambúrgueres',
       isAvailable: true,
+      badgeType: 'isNew',
     },
     {
       id: '2',
@@ -29,7 +30,7 @@ export const MenuView = () => {
       quantity: 0,
       category: 'Pizzas',
       isAvailable: true,
-      hasPromotion: true,
+      badgeType: 'hasPromotion',
     },
     {
       id: '3',
@@ -41,18 +42,12 @@ export const MenuView = () => {
       quantity: 8,
       category: 'Japonesa',
       isAvailable: true,
-      isNew: true,
+      badgeType: 'isNew',
     },
   ])
 
-  const handleEdit = (item: CardMenuData) => {
-    console.log('Editar item:', item.title)
-    // Implementar modal de edição
-  }
-
   const handleDelete = (itemId: string) => {
     setMenuItems((prev) => prev.filter((item) => item.id !== itemId))
-    console.log('Item deletado:', itemId)
   }
 
   const handleDuplicate = (item: CardMenuData) => {
@@ -62,7 +57,6 @@ export const MenuView = () => {
       title: `${item.title} (Cópia)`,
     }
     setMenuItems((prev) => [...prev, newItem])
-    console.log('Item duplicado:', newItem.title)
   }
 
   const handleToggleAvailability = (itemId: string, isAvailable: boolean) => {
@@ -97,7 +91,6 @@ export const MenuView = () => {
             <CardMenu
               key={index}
               item={item}
-              onEdit={handleEdit}
               onDelete={handleDelete}
               onDuplicate={handleDuplicate}
               onUpdatePrice={handleUpdatePrice}

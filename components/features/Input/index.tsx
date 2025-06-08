@@ -29,20 +29,21 @@ export const Input = ({
   return (
     <>
       <div className="relative ">
-        {type === 'email' && (
-          <>
-            <div className="flex items-center justify-center">
-              <InputShad
-                className="h-10 rounded placeholder:text-[#A1A1AA] text-zinc-200 border border-transparent focus-visible:ring-0 focus:border-zinc-700 bg-zinc-900"
-                placeholder={placeholder}
-                onChange={onChange}
-                {...register}
-                type="text"
-                {...props}
-              />
-            </div>
-          </>
-        )}
+        {type === 'email' ||
+          (type === 'text' && (
+            <>
+              <div className="flex items-center justify-center">
+                <InputShad
+                  className="h-10 rounded placeholder:text-[#A1A1AA] text-zinc-200 border border-transparent focus-visible:ring-0 focus:border-zinc-700 bg-zinc-900"
+                  placeholder={placeholder}
+                  onChange={onChange}
+                  {...register}
+                  type="text"
+                  {...props}
+                />
+              </div>
+            </>
+          ))}
 
         {type === 'currency' && (
           <CurrencyInput
