@@ -19,7 +19,7 @@ export const ContextMenuItems = ({ items }: ContextMenuItemsProps) => {
         {items.map((item) => (
           <DropdownMenuItem
             key={item.label}
-            onClick={item.onOpen}
+            onClick={item.onClick}
             className="flex items-center gap-2 focus:outline-none hover:bg-zinc-900 w-full cursor-pointer"
           >
             <div className="w-5 h-5 flex items-center ml-3">{item.icon()}</div>

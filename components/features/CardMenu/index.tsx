@@ -1,7 +1,7 @@
 'use client'
 
 import { MdVisibilityOff, MdContentCopy, MdDelete } from 'react-icons/md'
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useMemo, useRef, useState, type KeyboardEvent } from 'react'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { CardMenuData } from '@/types/card-menu-items'
@@ -37,10 +37,6 @@ export const CardMenu = ({
   const [isEditingPrice, setIsEditingPrice] = useState(false)
   const [tempPrice, setTempPrice] = useState(item.price.toString())
   const { register } = useForm()
-
-  useEffect(() => {
-    setTempPrice(item.price.toString())
-  }, [item.price])
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = Math.max(0, item.quantity + delta)
@@ -79,9 +75,12 @@ export const CardMenu = ({
     },
   ]
 
+  const IsUnavailable = useMemo(() => {
+    return !item.isAvailable || item.quantity === 0
+  }, [item.isAvailable, item.quantity])
+
   const getStatusColor = () => {
-    if (!item.isAvailable || item.quantity === 0)
-      return 'bg-transparent border-red-500/40'
+    if (IsUnavailable) return 'bg-transparent border-red-500/40'
     return 'bg-transparent border-green-500/40'
   }
 
@@ -93,7 +92,7 @@ export const CardMenu = ({
       >
         <article
           className={`group p-4 relative flex flex-col w-full rounded-xl overflow-hidden border-2 bg-card transition-all duration-300 ${getStatusColor()} ${
-            !item.isAvailable ? 'opacity-75' : ''
+            IsUnavailable ? 'opacity-75' : ''
           }`}
         >
           {/* Header Content */}
@@ -107,7 +106,7 @@ export const CardMenu = ({
               src={item.image || '/placeholder.svg'}
               className="w-full h-48 object-cover rounded-[10px]"
             />
-            {!item.isAvailable && (
+            {IsUnavailable && (
               <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
                 <MdVisibilityOff className="text-white text-3xl" />
               </div>
