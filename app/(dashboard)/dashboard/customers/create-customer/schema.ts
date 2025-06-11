@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { emailRegex } from '@/utils/login-schema'
+import { emailRegex } from '@/app/(auth)/schema/login-schema'
 
 export const CreateCustomerSchema = z.object({
   email: z.string().regex(emailRegex, { message: 'Insira um email válido' }),

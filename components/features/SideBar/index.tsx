@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 
 import {
@@ -14,7 +12,7 @@ import { NavUser } from './NavUser'
 
 type SideBarProps = {
   navItems: {
-    icon?: () => JSX.Element
+    icon?: () => React.JSX.Element
     isActive?: boolean
     title: string
     url: string

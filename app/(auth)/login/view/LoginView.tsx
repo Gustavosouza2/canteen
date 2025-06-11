@@ -1,3 +1,16 @@
+'use client'
+
+import { useFormStatus, useFormState} from "react-dom" 
+import { useCallback, useEffect } from 'react'
+import { redirect } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+
+import { LoginSchema } from '@/app/(auth)/schema/login-schema'
+import { loginAction } from '@/server-actions/server-login'
+import { Button } from '@/components/features/Button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Input } from '@/components/features/Input'
+import {  useToast } from '@/hooks/ui/use-toast'
 import {
   FormControl,
   FormMessage,
@@ -7,12 +20,52 @@ import {
   Form,
 } from '@/components/ui/form'
 
-import { Button } from '@/components/features/Button'
-import { Input } from '@/components/features/Input'
-import type { useLogin } from '../model/useLogin'
+const initialState = {
+  error: "",
+  success: false,
+}
 
-export const LoginView = (props: ReturnType<typeof useLogin>) => {
-  const { register, isValid, form, isPending, onSubmit } = props
+export function LoginForm() {
+  const { pending: isPending } = useFormStatus()
+  const [state, formAction] = useFormState(loginAction, initialState)
+
+  const { toast } = useToast()
+
+  const stateActionValidate =  useCallback((state: typeof initialState) => {  
+    if (state?.error) {
+      toast({
+        title: 'O Login falhou!',
+        description:
+          'O Email ou a senha estão incorretos, tente novamente!',
+        variant: 'default',
+      })
+    }
+    if(state.success) {
+      toast({
+        title: 'Login realizado com sucesso!',
+        description:
+          'Você está sendo redirecionado para a dashboard!',
+        variant: 'default',
+      })
+      redirect('/dashboard/home')
+    }
+  }, [state?.error, state?.success, toast])
+
+
+  useEffect(() => {
+    stateActionValidate(state as typeof initialState)
+  }, [state?.error, state?.success, stateActionValidate])
+
+  const form = useForm({
+    defaultValues: { email: '', password: '' },
+    resolver: zodResolver(LoginSchema),
+    shouldUnregister: true,
+  })
+
+  const {
+    register,
+    formState: { isValid },
+  } = form
 
   return (
     <main className="relative bg-[#080808] h-screen w-screen flex items-center justify-between md:py-12 py-0 overflow-hidden">
@@ -74,7 +127,7 @@ export const LoginView = (props: ReturnType<typeof useLogin>) => {
         </div>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            action={formAction}
             className="relative z-10  w-full space-y-6 bg-[#121113] flex flex-col items-center justify-center rounded md:p-16 p-11"
           >
             <div className="flex flex-col items-center md:items-start justify-center md:justify-items-start font-mono mb-10">
@@ -100,7 +153,7 @@ export const LoginView = (props: ReturnType<typeof useLogin>) => {
                     <Input
                       placeholder="example@gmail.com"
                       register={register}
-                      type="email"
+                      type="text"
                       {...field}
                     />
                   </FormControl>

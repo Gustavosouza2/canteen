@@ -10,12 +10,7 @@ import {
   useMemo,
 } from 'react'
 import { useRouter } from 'next/navigation'
-
-type UserData = {
-  userName: string | undefined
-  email: string | undefined
-  id: string
-}
+import { UserData } from '@/types/user'
 
 type UserContextProps = {
   handleLogin: (e: LoginResponseSuccess) => void

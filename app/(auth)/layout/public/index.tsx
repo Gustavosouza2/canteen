@@ -1,19 +1,12 @@
-'use client'
-
-import { ReactNode, useState, useEffect } from 'react'
+import { ReactNode } from 'react'
 
 import { HeaderLogin } from './Header'
 
-export const LoginLayoutComponent = ({ children }: { children: ReactNode }) => {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) {
-    return null
-  }
+export async function LoginLayoutComponent({
+  children,
+}: {
+  children: ReactNode
+}) {
   return (
     <div className="flex flex-col h-screen">
       <HeaderLogin />
