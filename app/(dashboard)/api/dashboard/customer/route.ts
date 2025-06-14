@@ -1,6 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma/prisma'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
