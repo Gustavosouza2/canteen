@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-
-import { Customer, CustomersResponse } from '@/types/customer'
+import type { Customer, CustomersResponse } from '@/types/customer'
 
 export const useCustomersList = (page: number, pageSize: number) => {
   const queryKey = ['User', page, pageSize]
@@ -10,6 +9,10 @@ export const useCustomersList = (page: number, pageSize: number) => {
       const res = await fetch(
         `/api/dashboard/customer?page=${page}&pageSize=${pageSize}`,
       )
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`)
+      }
 
       const text = await res.text()
       if (!text) {
@@ -22,7 +25,7 @@ export const useCustomersList = (page: number, pageSize: number) => {
         count: response.count,
       }
     } catch (error) {
-      console.error(error)
+      console.error('Fetch customers error:', error)
       throw error
     }
   }
