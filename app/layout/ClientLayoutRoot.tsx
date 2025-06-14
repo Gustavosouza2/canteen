@@ -56,21 +56,25 @@ export default function ClientLayoutRoot({
 
   return (
     <UserContextProvider token={token} user={user}>
-       <ReactQueryClientProvider>
+      <ReactQueryClientProvider>
         <html
-        lang="en"
-        className={`${GeistSans.className} ${GeistMono.className}`}
-      >
-        <body className="bg-[#0F0F10] flex w-screen h-screen overflow-hidden">
-          <Toaster />
-          <SidebarProvider>
-            {pathname !== '/login' && (
-              <AppSidebar user={user} navItems={navigationItems} logout={handleLogout} />
-            )}
-            {children}
-          </SidebarProvider>
-        </body>
-      </html>
+          lang="en"
+          className={`${GeistSans.className} ${GeistMono.className}`}
+        >
+          <body className="bg-[#0F0F10] flex w-screen h-screen overflow-hidden">
+            <Toaster />
+            <SidebarProvider>
+              {pathname !== '/login' && (
+                <AppSidebar
+                  user={user}
+                  navItems={navigationItems}
+                  logout={handleLogout}
+                />
+              )}
+              {children}
+            </SidebarProvider>
+          </body>
+        </html>
       </ReactQueryClientProvider>
     </UserContextProvider>
   )

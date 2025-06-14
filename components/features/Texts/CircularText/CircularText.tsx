@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 
 interface CircularTextProps {
-  text: string
-  spinDuration?: number
   onHover?: 'slowDown' | 'speedUp' | 'pause' | 'goBonkers'
+  spinDuration?: number
   className?: string
+  text: string
 }
 
 const getRotationTransition = (

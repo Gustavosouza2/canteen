@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormStatus, useFormState} from "react-dom" 
+import { useFormStatus, useFormState } from 'react-dom'
 import { useCallback, useEffect } from 'react'
 import { redirect } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -10,7 +10,7 @@ import { loginAction } from '@/server-actions/server-login'
 import { Button } from '@/components/features/Button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '@/components/features/Input'
-import {  useToast } from '@/hooks/ui/use-toast'
+import { useToast } from '@/hooks/ui/use-toast'
 import {
   FormControl,
   FormMessage,
@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/form'
 
 const initialState = {
-  error: "",
+  error: '',
   success: false,
 }
 
@@ -31,30 +31,30 @@ export function LoginForm() {
 
   const { toast } = useToast()
 
-  const stateActionValidate =  useCallback((state: typeof initialState) => {  
-    if (state?.error) {
-      toast({
-        title: 'O Login falhou!',
-        description:
-          'O Email ou a senha estão incorretos, tente novamente!',
-        variant: 'default',
-      })
-    }
-    if(state.success) {
-      toast({
-        title: 'Login realizado com sucesso!',
-        description:
-          'Você está sendo redirecionado para a dashboard!',
-        variant: 'default',
-      })
-      redirect('/dashboard/home')
-    }
-  }, [state?.error, state?.success, toast])
-
+  const stateActionValidate = useCallback(
+    (state: typeof initialState) => {
+      if (state?.error) {
+        toast({
+          title: 'O Login falhou!',
+          description: 'O Email ou a senha estão incorretos, tente novamente!',
+          variant: 'default',
+        })
+      }
+      if (state.success) {
+        toast({
+          title: 'Login realizado com sucesso!',
+          description: 'Você está sendo redirecionado para a dashboard!',
+          variant: 'default',
+        })
+        redirect('/dashboard/home')
+      }
+    },
+    [toast],
+  )
 
   useEffect(() => {
     stateActionValidate(state as typeof initialState)
-  }, [state?.error, state?.success, stateActionValidate])
+  }, [state?.error, state?.success, stateActionValidate, state])
 
   const form = useForm({
     defaultValues: { email: '', password: '' },
@@ -85,7 +85,8 @@ export function LoginForm() {
             .electric-grid {
               position: absolute;
               inset: 0;
-              background-image: linear-gradient(
+              background-image:
+                linear-gradient(
                   to right,
                   rgba(255, 255, 255, 0.2) 1px,
                   transparent 1px
