@@ -1,64 +1,64 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import arcjet, { shield } from '@arcjet/next'
+// import arcjet, { shield } from '@arcjet/next'
 import { PrismaClient } from '@prisma/client'
 
-const arcJet = arcjet({
-  key: process.env.ARCJET_KEY!,
-  rules: [
-    shield({
-      mode: 'LIVE',
-    }),
-  ],
-})
+// const arcJet = arcjet({
+//   key: process.env.ARCJET_KEY!,
+//   rules: [
+//     shield({
+//       mode: 'LIVE',
+//     }),
+//   ],
+// })
 
 const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest) {
-  const decision = await arcJet.protect(request)
+  // const decision = await arcJet.protect(request)
   const searchParams = new URLSearchParams(request.url)
 
   const pageSize = Number(searchParams.get('pageSize') || 10)
   const page = Number(searchParams.get('page') || 1)
 
-  if (decision.isDenied()) {
+  // if (decision.isDenied()) {
+  //   return NextResponse.json(
+  //     { error: 'Unauthorized', reason: decision.reason },
+  //     { status: 401 },
+  //   )
+  // }
+
+  // if (decision.isAllowed()) {
+  try {
+    const count = await prisma.user.count()
+
+    if (!count) {
+      return NextResponse.json({ data: [], count: 0 })
+    }
+
+    const totalPages = Math.ceil(count / pageSize)
+    const adjustedPage = Math.min(page, totalPages)
+    const skip = (adjustedPage - 1) * pageSize
+
+    const data = await prisma.user.findMany({
+      skip,
+      take: pageSize,
+      orderBy: {
+        id: 'desc',
+      },
+    })
+
+    return NextResponse.json({ data, count })
+  } catch (error) {
+    console.error(error)
     return NextResponse.json(
-      { error: 'Unauthorized', reason: decision.reason },
-      { status: 401 },
+      {
+        error: 'Database error',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
     )
   }
-
-  if (decision.isAllowed()) {
-    try {
-      const count = await prisma.user.count()
-
-      if (!count) {
-        return NextResponse.json({ data: [], count: 0 })
-      }
-
-      const totalPages = Math.ceil(count / pageSize)
-      const adjustedPage = Math.min(page, totalPages)
-      const skip = (adjustedPage - 1) * pageSize
-
-      const data = await prisma.user.findMany({
-        skip,
-        take: pageSize,
-        orderBy: {
-          id: 'desc',
-        },
-      })
-
-      return NextResponse.json({ data, count })
-    } catch (error) {
-      console.error(error)
-      return NextResponse.json(
-        {
-          error: 'Database error',
-          details: error instanceof Error ? error.message : 'Unknown error',
-        },
-        { status: 500 },
-      )
-    }
-  }
+  // }
 }
 
 export async function POST(request: NextRequest) {
