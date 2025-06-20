@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import arcjet, { shield } from '@arcjet/next'
-
 import { prisma } from '@/lib/prisma/prisma'
+import arcjet, { shield } from '@arcjet/next'
 
 export const dynamic = 'force-dynamic'
 const arcJet = arcjet({
