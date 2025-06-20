@@ -1,7 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import arcjet, { shield } from '@arcjet/next'
-import { PrismaClient } from '@prisma/client'
 
+import { prisma } from '@/lib/prisma/prisma'
+
+export const dynamic = 'force-dynamic'
 const arcJet = arcjet({
   key: process.env.ARCJET_KEY!,
   rules: [
@@ -11,24 +13,30 @@ const arcJet = arcjet({
   ],
 })
 
-const prisma = new PrismaClient()
-
 export async function GET(request: NextRequest) {
   const decision = await arcJet.protect(request)
-  const searchParams = new URLSearchParams(request.url)
 
-  const pageSize = Number(searchParams.get('pageSize') || 10)
-  const page = Number(searchParams.get('page') || 1)
+  try {
+    const searchParams = request.nextUrl.searchParams
 
-  if (decision.isDenied()) {
-    return NextResponse.json(
-      { error: 'Unauthorized', reason: decision.reason },
-      { status: 401 },
-    )
-  }
+    const pageSize = Number(searchParams.get('pageSize') || 10)
+    const page = Number(searchParams.get('page') || 1)
 
-  if (decision.isAllowed()) {
-    try {
+    if (decision.isDenied()) {
+      return NextResponse.json(
+        { error: 'Unauthorized', reason: decision.reason },
+        { status: 401 },
+      )
+    }
+
+    if (pageSize > 100) {
+      return NextResponse.json(
+        { error: 'Page size too large' },
+        { status: 400 },
+      )
+    }
+
+    if (decision.isAllowed()) {
       const count = await prisma.user.count()
 
       if (!count) {
@@ -48,43 +56,43 @@ export async function GET(request: NextRequest) {
       })
 
       return NextResponse.json({ data, count })
-    } catch (error) {
-      console.error(error)
-      return NextResponse.json(
-        {
-          error: 'Database error',
-          details: error instanceof Error ? error.message : 'Unknown error',
-        },
-        { status: 500 },
-      )
     }
+  } catch (error) {
+    console.error('Database error:', error)
+    return NextResponse.json(
+      {
+        error: 'Database error',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    )
   }
 }
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData()
-
-  const createdAt = formData.get('created_at')?.toString()
-  const amount = Number(formData.get('amount')?.toString())
-  const status = formData.get('status')?.toString()
-  const email = formData.get('email')?.toString()
-  const name = formData.get('name')?.toString()
-
-  if (!name || !email) {
-    return NextResponse.json(
-      {
-        error: 'Validation error',
-        details: 'Name and email are required',
-      },
-      { status: 400 },
-    )
-  }
-
   try {
+    const formData = await request.formData()
+
+    const createdAt = formData.get('created_at')?.toString()
+    const amount = Number(formData.get('amount')?.toString())
+    const status = formData.get('status')?.toString()
+    const email = formData.get('email')?.toString()
+    const name = formData.get('name')?.toString()
+
+    if (!name || !email) {
+      return NextResponse.json(
+        {
+          error: 'Validation error',
+          details: 'Name and email are required',
+        },
+        { status: 400 },
+      )
+    }
+
     const data = await prisma.user.create({
       data: {
         createdAt: createdAt ? new Date(createdAt) : new Date(),
-        amount,
+        amount: amount || 0,
         status: status || 'pending',
         name,
         email,
@@ -93,32 +101,39 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(data)
   } catch (err) {
-    console.error(err)
+    console.error('Create user error:', err)
     return NextResponse.json(
       {
         error: 'Database error',
         details: err instanceof Error ? err.message : 'Unknown error',
       },
-      { status: 400 },
+      { status: 500 },
     )
   }
 }
 
 export async function PATCH(request: NextRequest) {
-  const formData = await request.formData()
-
-  const amountEdit = Number(formData.get('amount')?.toString())
-  const customerId = Number(formData.get('id')?.toString())
-  const statusEdit = formData.get('status')?.toString()
-
   try {
+    const formData = await request.formData()
+
+    const amountEdit = Number(formData.get('amount')?.toString())
+    const customerId = Number(formData.get('id')?.toString())
+    const statusEdit = formData.get('status')?.toString()
+
+    if (!customerId) {
+      return NextResponse.json(
+        { error: 'Customer ID is required' },
+        { status: 400 },
+      )
+    }
+
     const updatedUser = await prisma.user.update({
       where: {
         id: customerId,
       },
       data: {
-        status: statusEdit,
-        amount: amountEdit,
+        ...(statusEdit && { status: statusEdit }),
+        ...(amountEdit && { amount: amountEdit }),
       },
     })
 
@@ -128,13 +143,21 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json(updatedUser)
   } catch (err) {
-    console.error(err)
+    console.error('Update user error:', err)
+
+    if (
+      err instanceof Error &&
+      err.message.includes('Record to update not found')
+    ) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
     return NextResponse.json(
       {
         error: 'Database error',
         details: err instanceof Error ? err.message : 'Unknown error',
       },
-      { status: 400 },
+      { status: 500 },
     )
   }
 }
