@@ -1,36 +1,35 @@
-import { useQuery } from '@tanstack/react-query'
-
 import { Customer, CustomersResponse } from '@/types/customer'
+import { serverFetch } from '@/lib/api'
 
-export const useCustomersList = (page: number, pageSize: number) => {
-  const queryKey = ['User', page, pageSize]
+export const useCustomersList = async (
+  page: number,
+  pageSize: number,
+): Promise<CustomersResponse> => {
+  try {
+    const res = await serverFetch<CustomersResponse>(
+      `/api/dashboard/customer?page=${page}&pageSize=${pageSize}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        next: {
+          tags: ['customers'],
+        },
+        cache: 'force-cache',
+      },
+    )
 
-  const queryFn = async (): Promise<CustomersResponse> => {
-    try {
-      const res = await fetch(
-        `/api/dashboard/customer?page=${page}&pageSize=${pageSize}`,
-      )
-
-      const text = await res.text()
-      if (!text) {
-        throw new Error('Empty response received')
-      }
-
-      const response = JSON.parse(text)
-      return {
-        data: response.data as Customer[],
-        count: response.count,
-      }
-    } catch (error) {
-      console.error(error)
-      throw error
+    if (!res.data) {
+      throw new Error(`HTTP error! status: 404`)
     }
-  }
 
-  return useQuery({
-    staleTime: 1000 * 60,
-    queryKey,
-    retry: 2,
-    queryFn,
-  })
+    return {
+      data: res.data as Customer[],
+      count: res.count,
+    }
+  } catch (error) {
+    console.error('Error fetching customers:', error)
+    throw error
+  }
 }

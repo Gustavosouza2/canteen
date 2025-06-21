@@ -1,8 +1,10 @@
-'use client'
+import { useCustomersList } from '@/hooks/custom/useCustomers'
+import { CustomersView } from './view/CustomersView'
+import { PAGE_SIZE } from '@/constants/pageSize'
 
-import { customersView } from './view/CustomersView'
-import { useCustomers } from './model/useCustomers'
+export default async function Customers() {
+  // TODO: IMPLEMENTATION OF PAGINATION
+  const customers = await useCustomersList(1, PAGE_SIZE)
 
-export default function Customers() {
-  return customersView(useCustomers())
+  return <CustomersView customers={customers} />
 }

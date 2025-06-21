@@ -1,32 +1,52 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react'
 import { MdEdit } from 'react-icons/md'
 
 import { CreateCustomerModal } from '../create-customer'
+import { type Customer, type CustomersResponse } from '@/types/customer'
 import { DataTable } from '@/components/features/Table'
 import { EditCustomerModal } from '../edit-customer'
-import { useCustomers } from '../model/useCustomers'
-import { Customer } from '@/types/customer'
+import { PAGE_SIZE } from '@/constants/pageSize'
 
-export const customersView = (props: ReturnType<typeof useCustomers>) => {
-  const {
-    setSelectedCustomer,
-    handleIsOpenCreate,
-    handleIsOpenEdit,
-    selectedCustomer,
-    isOpenCreate,
-    isOpenEdit,
-    totalPages,
-    isLoading,
-    customers,
-    setPage,
-    columns,
-    page,
-  } = props
+type CustomersViewProps = {
+  customers: CustomersResponse
+}
+
+export const CustomersView = ({ customers }: CustomersViewProps) => {
+  const [page, setPage] = useState<number>(1)
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer>()
+
+  useEffect(() => {
+    if (customers?.count && customers.count <= PAGE_SIZE && page !== 1) {
+      setPage(1)
+    }
+  }, [customers?.count, page])
+
+  const [isOpenCreate, setIsOpenCreate] = useState<boolean>(false)
+  const handleIsOpenCreate = () => setIsOpenCreate(!isOpenCreate)
+
+  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
+  const handleIsOpenEdit = () => setIsOpenEdit(!isOpenEdit)
+
+  const totalPages = customers?.count
+    ? Math.max(1, Math.ceil(customers.count / PAGE_SIZE))
+    : 1
+
+  const columns = [
+    { name: 'name', label: 'Nome:', size: '30' },
+    { name: 'email', label: 'Email:', size: '30' },
+    { name: 'status', label: 'Status:', size: '40' },
+    { name: 'amount', label: 'Valor:', size: '20' },
+    { name: 'actions', label: '', size: '0' },
+  ] as const
 
   const handleIsOpenEditModal = (customerId: number) => {
-    const customerToEdit = customers.find(
+    const customerToEdit = customers?.data?.find(
       (customer: Customer) => customer.id === customerId,
     )
+
     if (customerToEdit) {
       setSelectedCustomer(customerToEdit)
       handleIsOpenEdit()
@@ -37,7 +57,7 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
     {
       label: 'Editar',
       icon: () => <MdEdit className="h-4 w-4 fill-current" />,
-      onOpen: () => handleIsOpenEditModal(rowData.id),
+      onClick: () => handleIsOpenEditModal(rowData.id),
     },
   ]
 
@@ -76,10 +96,9 @@ export const customersView = (props: ReturnType<typeof useCustomers>) => {
         onPageChange={(page) => setPage(page)}
         items={ItemsContextMenu}
         totalPages={totalPages}
-        isLoading={isLoading}
+        data={customers?.data}
         currentPage={page}
         columns={columns}
-        data={customers}
         title="Clientes"
       />
     </div>
