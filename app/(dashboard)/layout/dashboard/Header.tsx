@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { UserMenu } from '@/components/features/UserMenu'
-import { getServerUser } from '@/server-actions/get-user'
+import { useUserContext } from '@/context/userContext'
 
-export const HeaderDashboard = async () => {
-  const user = await getServerUser()
+export const HeaderDashboard = () => {
+  const { userData } = useUserContext()
 
-  const email = user?.email
+  const email = userData?.email
   const rawUserName = email?.slice(0, 7)
 
   return (

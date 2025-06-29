@@ -1,4 +1,4 @@
-import { CardMenuData } from '@/types/card-menu-items'
+import { CardMenuData } from './types'
 
 type TextCardMenuProps = {
   item: CardMenuData
@@ -6,7 +6,7 @@ type TextCardMenuProps = {
 
 export const TextCardMenu = ({ item }: TextCardMenuProps) => {
   return (
-    <div className="relative z-10 flex-1">
+    <div className="relative flex-1">
       <div className="flex justify-between items-start mb-2">
         <h3 className="text-lg font-semibold text-foreground line-clamp-2">
           {item.title}

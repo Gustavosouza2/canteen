@@ -23,10 +23,10 @@ export const Card = ({ data, isLoading }: CardMapProps) => {
   return data.map((item, index: number) => (
     <>
       {isLoading ? (
-        <Skeleton className="w-[330px] h-36 rounded-xl " />
+        <Skeleton className="w-full h-36 rounded-xl" />
       ) : (
         <CardShadcn
-          className="md:w-[21rem] w-full rounded-xl border border-[#FFFA]/10 bg-[#0E0E10]"
+          className="w-full rounded-xl border border-[#FFFA]/10 bg-[#0E0E10]"
           key={index}
         >
           <CardHeader>

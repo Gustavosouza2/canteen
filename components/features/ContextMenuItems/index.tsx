@@ -1,6 +1,5 @@
 'use client'
 
-import { ContextMenuItemsProps } from '@/types/context-menu-items'
 import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 import { VscKebabVertical } from 'react-icons/vsc'
 import {
@@ -8,6 +7,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
+import { ContextMenuItemsProps } from './types'
 
 export const ContextMenuItems = ({ items }: ContextMenuItemsProps) => {
   return (

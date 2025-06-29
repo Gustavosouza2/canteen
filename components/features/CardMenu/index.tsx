@@ -2,15 +2,15 @@
 
 import { MdVisibilityOff, MdContentCopy, MdDelete } from 'react-icons/md'
 import { useMemo, useRef, useState, type KeyboardEvent } from 'react'
+import { useForm } from 'react-hook-form'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { CardMenuData } from '@/types/card-menu-items'
 
 import { FooterCardMenu } from './FooterCardMenu'
 import { HeaderCardMenu } from './HeaderCardMenu'
 import { MainCardMenu } from './MainCardMenu'
 import { TextCardMenu } from './TextCardMenu'
-import { useForm } from 'react-hook-form'
+import { CardMenuData } from './types'
 
 type CardMenuProps = {
   fadeOut?: number
@@ -99,7 +99,7 @@ export const CardMenu = ({
           <HeaderCardMenu item={item} items={contextMenuItems} />
 
           {/* Image Content */}
-          <div className="relative z-10 mb-4">
+          <div className="relative  mb-4">
             <img
               loading="lazy"
               alt={item.title}

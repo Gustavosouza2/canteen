@@ -1,34 +1,27 @@
+'use client'
+
+import { Card, type CardProps } from '@/components/features/Card'
 import { Chart } from '@/components/features/Chart'
-import { Card, CardProps } from '@/components/features/Card'
-import { getServerUser } from '@/server-actions/get-user'
-import { useCustomersList } from '@/hooks/custom/useCustomers'
-import { Customer } from '@/types/customer'
+import { type User } from '@supabase/supabase-js'
+import { type Customer } from '@/types/customer'
 
-const PAGE_SIZE = 10
+type HomeViewProps = {
+  customers: { data: Customer[]; count: number }
+  user: User | null
+}
 
-export const HomeView = async () => {
-  const user = await getServerUser()
-
+export default function HomeView({ user, customers }: HomeViewProps) {
   const userData = {
     email: user?.email,
     name: user?.email?.split('@')[0],
   }
-  const params = new URLSearchParams()
 
-  params.set('page', '1')
-  params.set('pageSize', PAGE_SIZE.toString())
-
-  const page = Number(params.get('page'))
-  const pageSize = Number(params.get('pageSize'))
-
-  const customers = await useCustomersList(page, pageSize)
-  console.log(customers.data)
-
-  const totalAmount = customers?.data
-    ?.map((customer: Customer) => customer?.amount)
-    .reduce((acc: number, currAmount: number) => {
-      return acc + currAmount
-    }, 0)
+  const totalAmount =
+    customers?.data
+      ?.map((customer: Customer) => customer?.amount)
+      .reduce((acc: number, currAmount: number) => {
+        return acc + currAmount
+      }, 0) || 0
 
   const cardItems: CardProps[] = [
     {
@@ -37,7 +30,7 @@ export const HomeView = async () => {
       type: 'string',
     },
     {
-      info: customers?.data?.length.toString() ?? '',
+      info: customers?.data?.length.toString() ?? '0',
       description: 'Total de clientes adicionados',
       title: 'Clientes',
       typeInfo: 'text',
@@ -56,11 +49,32 @@ export const HomeView = async () => {
   ]
 
   return (
-    <main className="grid flex-col gap-6 px-10 items-center justify-center scrollbar-hide">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card data={cardItems} isLoading={false} />
+    <main className="flex flex-col gap-6 py-20 mt-40 px-10 items-center justify-center scrollbar-hide">
+      <div className="w-full max-w-6xl">
+        <div className="block md-mobile:hidden">
+          <div className="mb-4">
+            <Card data={[cardItems[0]]} isLoading={false} key={user?.id} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-1">
+              <Card data={[cardItems[1]]} isLoading={false} key={user?.id} />
+            </div>
+
+            <div className="md:col-span-1">
+              <Card data={[cardItems[2]]} isLoading={false} key={user?.id} />
+            </div>
+          </div>
+        </div>
+
+        <div className="hidden md-mobile:block">
+          <div className="grid grid-cols-3 gap-4">
+            <Card data={cardItems} isLoading={false} key={user?.id} />
+          </div>
+        </div>
       </div>
-      <div className="grid grid-cols-1 gap-4">
+
+      <div className="w-full max-w-7xl">
         <Chart isLoading={false} data={customers?.data ?? []} />
       </div>
     </main>

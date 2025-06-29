@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useMemo } from 'react'
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
 import { format, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -67,8 +68,9 @@ const chartConfig = {
 
 const currentMonth = format(new Date(), 'MMMM yyyy', { locale: ptBR })
 
-export const Chart = ({ isLoading, data }: ChartProps) => {
-  const chartData = processDataByMonth(data)
+export const Chart = React.memo(({ isLoading, data }: ChartProps) => {
+  const chartData = useMemo(() => processDataByMonth(data), [data])
+
   return (
     <>
       {isLoading ? (
@@ -118,4 +120,6 @@ export const Chart = ({ isLoading, data }: ChartProps) => {
       )}
     </>
   )
-}
+})
+
+Chart.displayName = 'Chart'

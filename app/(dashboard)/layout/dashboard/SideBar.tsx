@@ -1,39 +1,43 @@
 import * as React from 'react'
+import Link from 'next/link'
+
 import {
   Sidebar as SideBarShad,
   SidebarGroupContent,
   SidebarMenuButton,
+  SidebarGroupLabel,
   SidebarMenuItem,
   SidebarContent,
   SidebarGroup,
   SidebarMenu,
-  SidebarGroupLabel,
 } from '@/components/ui/sidebar'
 
 import { CustomerIcon, HomeIcon } from '@/assets/icons'
 
 interface NavItem {
+  icon: () => JSX.Element
   disabled?: boolean
   external?: boolean
   title: string
   href?: string
-  icon: () => JSX.Element
 }
 
-export const items: NavItem[] = [
-  {
-    title: 'Home',
-    href: '/dashboard/home',
-    icon: HomeIcon,
-  },
-  {
-    title: 'Clientes',
-    href: '/dashboard/customers',
-    icon: CustomerIcon,
-  },
-]
-
 export const Sidebar = () => {
+  const items: NavItem[] = React.useMemo(
+    () => [
+      {
+        title: 'Home',
+        href: '/dashboard/home',
+        icon: HomeIcon,
+      },
+      {
+        title: 'Clientes',
+        href: '/dashboard/customers',
+        icon: CustomerIcon,
+      },
+    ],
+    [],
+  )
   return (
     <SideBarShad className="border-[#FFFA]/10 bg-transparent w-36">
       <SidebarContent className="bg-[#121214]">
@@ -47,12 +51,12 @@ export const Sidebar = () => {
                     asChild
                     className="text-[#fafafaaf] hover:bg-[#1E1E20] hover:text-[#373738] bg-transparent"
                   >
-                    <a href={item.href}>
+                    <Link href={item.href ?? ''} aria-disabled={item.disabled}>
                       <item.icon />
                       <span className="font-mono font-semibold ">
                         {item.title}
                       </span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

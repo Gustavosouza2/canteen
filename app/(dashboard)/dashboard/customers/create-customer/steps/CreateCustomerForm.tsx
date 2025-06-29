@@ -1,8 +1,6 @@
-import { SetStateAction, Dispatch, useState } from 'react'
+import { SetStateAction, Dispatch } from 'react'
 import { UseFormRegister, useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useToast } from '@/hooks/ui/use-toast'
 import {
   FormControl,
   FormMessage,
@@ -11,8 +9,8 @@ import {
   FormItem,
   Form,
 } from '@/components/ui/form'
-import axios from 'axios'
 
+import { createCustomerServer } from '@/server-actions/customers/create-customers'
 import { Button } from '@/components/features/Button'
 import { Input } from '@/components/features/Input'
 import { CreateCustomerSchema } from '../schema'
@@ -23,15 +21,15 @@ type CreateCustomerFormProps = {
 }
 
 type InputsProps = Array<{
-  type: 'email' | 'password' | 'select' | 'currency'
+  type: 'text' | 'password' | 'select' | 'currency'
   name: 'email' | 'name' | 'amount' | 'status'
+  register: UseFormRegister<any>
+  placeholder: string
   options?: Array<{
     label: string
     value: string
     id: number
   }>
-  register: UseFormRegister<any>
-  placeholder: string
   label: string
   id: number
 }>
@@ -39,11 +37,6 @@ type InputsProps = Array<{
 export const CreateCustomerForm = ({
   setCurrentStep,
 }: CreateCustomerFormProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const queryClient = useQueryClient()
-
-  const { toast } = useToast()
-
   const form = useForm({
     defaultValues: { email: '', name: '', amount: '', status: '' },
     resolver: zodResolver(CreateCustomerSchema),
@@ -60,42 +53,32 @@ export const CreateCustomerForm = ({
     formState: { isValid },
   } = form
 
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = date.getMonth()
-  const day = date.getDay()
-
-  const formattedDate = `${year}-${month}-${day}`
-
   const onSubmit = async () => {
-    setIsLoading(true)
+    try {
+      const formValues = form.getValues()
 
-    const formData = new FormData()
-    formData.append('amount', form.getValues('amount').toString().slice(3))
-    formData.append('status', form.getValues('status'))
-    formData.append('email', form.getValues('email'))
-    formData.append('name', form.getValues('name'))
-    formData.append('createdAt', formattedDate)
+      const date = new Date()
+      const year = date.getFullYear()
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
 
-    await axios
-      .post('/api/dashboard/customer', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(async (response) => {
+      const formattedDate = `${year}-${month}-${day}`
+
+      const formData = new FormData()
+      formData.append('amount', formValues.amount.toString().slice(3))
+      formData.append('status', formValues.status)
+      formData.append('createdAt', formattedDate)
+      formData.append('email', formValues.email)
+      formData.append('name', formValues.name)
+
+      const response = await createCustomerServer(formData)
+
+      if (response.status === 200) {
         setCurrentStep(1)
-        await queryClient.invalidateQueries({ queryKey: ['User'] })
-        return response.data
-      })
-      .catch(() => {
-        toast({
-          title: 'Algo deu errado!',
-          description: 'Erro ao criar um cliente, por favor, tente novamente!',
-          variant: 'destructive',
-        })
-      })
-      .finally(() => setIsLoading(false))
+      }
+    } catch (error) {
+      console.error('Error creating customer:', error)
+    }
   }
 
   const inputs: InputsProps = [
@@ -103,7 +86,7 @@ export const CreateCustomerForm = ({
       placeholder: 'Nome do cliente',
       register: form.register,
       label: 'Nome:',
-      type: 'email',
+      type: 'text',
       name: 'name',
       id: 2,
     },
@@ -112,7 +95,7 @@ export const CreateCustomerForm = ({
       register: form.register,
       label: 'Email:',
       name: 'email',
-      type: 'email',
+      type: 'text',
       id: 1,
     },
     {
@@ -136,7 +119,7 @@ export const CreateCustomerForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form action={onSubmit}>
         {inputs.map((input) => (
           <FormField
             key={input.id}
@@ -170,10 +153,9 @@ export const CreateCustomerForm = ({
         <div className="mt-10 flex-wrap flex">
           <Button
             type="submit"
-            isLoading={isLoading}
             disabled={!isValid || !watch('status') || !watch('amount')}
           >
-            {isLoading ? 'ENVIANDO...' : 'ENVIAR'}
+            ENVIAR
           </Button>
         </div>
       </form>

@@ -1,6 +1,5 @@
 import { SetStateAction, Dispatch, useState } from 'react'
 import { UseFormRegister, useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@/hooks/ui/use-toast'
 import {
@@ -44,7 +43,6 @@ export const EditCustomerForm = ({
   customer,
 }: EditCustomerFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const queryClient = useQueryClient()
   const { token } = useUserContext()
 
   const { toast } = useToast()
@@ -68,27 +66,26 @@ export const EditCustomerForm = ({
     formData.append('status', form.getValues('status'))
     formData.append('id', customer?.id.toString() ?? '')
 
-    await axios
-      .patch('/api/dashboard/customer', formData, {
+    try {
+      await axios.patch('/api/dashboard/customer', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(async (response) => {
-        setCurrentStep(1)
-        await queryClient.invalidateQueries({ queryKey: ['User'] })
-        return response.data
+
+      setCurrentStep(1)
+      // Refresh the page to get updated data
+      window.location.reload()
+    } catch (error) {
+      toast({
+        title: 'Algo deu errado!',
+        description:
+          'Erro ao editar os dados do cliente, por favor, tente novamente!',
+        variant: 'destructive',
       })
-      .catch(() => {
-        toast({
-          title: 'Algo deu errado!',
-          description:
-            'Erro ao editar os dados do cliente, por favor, tente novamente!',
-          variant: 'destructive',
-        })
-      })
-      .finally(() => setIsLoading(false))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const inputs: InputsProps = [
