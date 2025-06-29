@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { ButtonAddItemMenu } from '@/components/features/ButtonAddItemMenu'
-import { type CardMenuData } from '@/types/card-menu-items'
+import { type CardMenuData } from '@/components/features/CardMenu/types'
 import { CardMenu } from '@/components/features/CardMenu'
 
 export const MenuView = () => {

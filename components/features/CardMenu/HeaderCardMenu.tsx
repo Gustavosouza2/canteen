@@ -1,10 +1,10 @@
 import { MdLocalOffer } from 'react-icons/md'
 
-import { ContextMenuItemsProps } from '@/types/context-menu-items'
-import { CardMenuData } from '@/types/card-menu-items'
 import { Badge } from '@/components/ui/badge'
 
+import { ContextMenuItemsProps } from '../ContextMenuItems/types'
 import { ContextMenuItems } from '../ContextMenuItems'
+import { CardMenuData } from './types'
 
 type HeaderCardMenuProps = {
   items: ContextMenuItemsProps['items']

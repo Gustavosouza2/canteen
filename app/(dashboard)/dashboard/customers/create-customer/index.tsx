@@ -32,15 +32,15 @@ export const CreateCustomerModal = ({
 
   return (
     <Modal
-      description={
-        currentStep === 0
-          ? 'adicione um cliente para ser possível realizar a cobrança'
-          : 'volte para a lista de clientes'
-      }
       title={
         currentStep === 0
           ? 'Registre um novo cliente'
           : 'Cliente registrado com sucesso'
+      }
+      description={
+        currentStep === 0
+          ? 'adicione um cliente para ser possível realizar a cobrança'
+          : 'volte para a lista de clientes'
       }
       onClose={onClose}
       isOpen={isOpen}

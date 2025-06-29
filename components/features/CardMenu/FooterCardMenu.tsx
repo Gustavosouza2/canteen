@@ -1,10 +1,11 @@
-import { CardMenuData } from '@/types/card-menu-items'
 import { Switch } from '@/components/ui/switch'
 import {
   TooltipContent,
   TooltipTrigger,
   Tooltip,
 } from '@/components/ui/tooltip'
+
+import { CardMenuData } from './types'
 
 type FooterCardMenuProps = {
   onToggleAvailability:

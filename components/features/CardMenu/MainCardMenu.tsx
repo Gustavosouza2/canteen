@@ -1,9 +1,10 @@
 import { MdRemove, MdAdd } from 'react-icons/md'
 
-import { CardMenuData } from '@/types/card-menu-items'
 import { Input } from '@/components/features/Input'
 import { UseFormRegister } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
+
+import { CardMenuData } from './types'
 
 type MainCardMenuProps = {
   tempPrice: string
