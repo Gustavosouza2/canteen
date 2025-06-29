@@ -1,17 +1,17 @@
 'use client'
 
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { Cookies } from 'react-cookie'
-import { Toaster } from '@/components/ui/toaster'
+import { redirect, usePathname } from 'next/navigation'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import { Cookies } from 'react-cookie'
 
+import { CustomerIcon, HomeIcon, MenuIcon, OrdersIcon } from '@/assets/icons'
 import { UserContextProvider } from '@/context/userContext'
-import { CustomerIcon, HomeIcon, OrdersIcon } from '@/assets/icons'
+import { SidebarProvider } from '@/components/ui/sidebar'
 import AppSidebar from '@/components/features/SideBar'
+import { Toaster } from '@/components/ui/toaster'
+
 import '../styles/globals.css'
-import { redirect, usePathname } from 'next/navigation'
-import { ReactQueryClientProvider } from '@/services/query/QueryClientProvider'
 
 const navigationItems = [
   {
@@ -33,7 +33,7 @@ const navigationItems = [
   {
     title: 'Menu',
     url: '/dashboard/menu',
-    icon: CustomerIcon,
+    icon: MenuIcon,
   },
 ]
 
@@ -56,26 +56,24 @@ export default function ClientLayoutRoot({
 
   return (
     <UserContextProvider token={token} user={user}>
-      <ReactQueryClientProvider>
-        <html
-          lang="en"
-          className={`${GeistSans.className} ${GeistMono.className}`}
-        >
-          <body className="bg-[#0F0F10] flex w-screen h-screen overflow-hidden">
-            <Toaster />
-            <SidebarProvider>
-              {pathname !== '/login' && (
-                <AppSidebar
-                  user={user}
-                  navItems={navigationItems}
-                  logout={handleLogout}
-                />
-              )}
-              {children}
-            </SidebarProvider>
-          </body>
-        </html>
-      </ReactQueryClientProvider>
+      <html
+        lang="en"
+        className={`${GeistSans.className} ${GeistMono.className}`}
+      >
+        <body className="bg-[#0F0F10] flex w-screen h-screen overflow-hidden">
+          <Toaster />
+          <SidebarProvider>
+            {pathname !== '/login' && (
+              <AppSidebar
+                user={user}
+                navItems={navigationItems}
+                logout={handleLogout}
+              />
+            )}
+            {children}
+          </SidebarProvider>
+        </body>
+      </html>
     </UserContextProvider>
   )
 }
