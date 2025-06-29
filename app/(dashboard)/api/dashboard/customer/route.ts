@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma/prisma'
+import { revalidateTag } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -82,7 +83,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
 
-    const createdAt = formData.get('created_at')?.toString()
+    const createdAt = formData.get('createdAt')?.toString()
     const amount = Number(formData.get('amount')?.toString())
     const status = formData.get('status')?.toString()
     const email = formData.get('email')?.toString()
@@ -108,7 +109,10 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(data)
+    // Invalidate cache after creating a customer
+    revalidateTag('customers')
+
+    return NextResponse.json({ customer: data, status: 200 })
   } catch (err) {
     console.error('Create user error:', err)
     return NextResponse.json(
@@ -149,6 +153,9 @@ export async function PATCH(request: NextRequest) {
     if (!updatedUser) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 })
     }
+
+    // Invalidate cache after updating a customer
+    revalidateTag('customers')
 
     return NextResponse.json(updatedUser)
   } catch (err) {
