@@ -1,7 +1,7 @@
 'use client'
 
+import { useState, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
 import { MdEdit } from 'react-icons/md'
 
 import { CreateCustomerModal } from '../create-customer'
@@ -9,60 +9,87 @@ import { type Customer, type CustomersResponse } from '@/types/customer'
 import { DataTable } from '@/components/features/Table'
 import { EditCustomerModal } from '../edit-customer'
 import { PAGE_SIZE } from '@/constants/pageSize'
+import { useRouter } from 'next/router'
 
 type CustomersViewProps = {
   customers: CustomersResponse
+  currentPage: number
 }
 
-export const CustomersView = ({ customers }: CustomersViewProps) => {
-  const [page, setPage] = useState<number>(1)
+export const CustomersView = ({
+  customers,
+  currentPage,
+}: CustomersViewProps) => {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>()
+  const router = useRouter()
 
-  useEffect(() => {
-    if (customers?.count && customers.count <= PAGE_SIZE && page !== 1) {
-      setPage(1)
-    }
-  }, [customers?.count, page])
+  const handlePageChange = useCallback(
+    // TODO: FIX THIS
+    (page: number) => {
+      router.push(`/dashboard/customers?page=${page}`)
+    },
+    [router],
+  )
 
   const [isOpenCreate, setIsOpenCreate] = useState<boolean>(false)
-  const handleIsOpenCreate = () => setIsOpenCreate(!isOpenCreate)
+  const handleIsOpenCreate = useCallback(
+    () => setIsOpenCreate(!isOpenCreate),
+    [isOpenCreate],
+  )
 
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
-  const handleIsOpenEdit = () => setIsOpenEdit(!isOpenEdit)
+  const handleIsOpenEdit = useCallback(
+    () => setIsOpenEdit(!isOpenEdit),
+    [isOpenEdit],
+  )
 
-  const totalPages = customers?.count
-    ? Math.max(1, Math.ceil(customers.count / PAGE_SIZE))
-    : 1
+  const totalPages = useMemo(
+    () =>
+      customers?.count
+        ? Math.max(1, Math.ceil(customers.count / PAGE_SIZE))
+        : 1,
+    [customers?.count],
+  )
 
-  const columns = [
-    { name: 'name', label: 'Nome:', size: '30' },
-    { name: 'email', label: 'Email:', size: '30' },
-    { name: 'status', label: 'Status:', size: '40' },
-    { name: 'amount', label: 'Valor:', size: '20' },
-    { name: 'actions', label: '', size: '0' },
-  ] as const
+  const columns = useMemo(
+    () =>
+      [
+        { name: 'name', label: 'Nome:', size: '30' },
+        { name: 'email', label: 'Email:', size: '30' },
+        { name: 'status', label: 'Status:', size: '40' },
+        { name: 'amount', label: 'Valor:', size: '20' },
+        { name: 'actions', label: '', size: '0' },
+      ] as const,
+    [],
+  )
 
-  const handleIsOpenEditModal = (customerId: number) => {
-    const customerToEdit = customers?.data?.find(
-      (customer: Customer) => customer.id === customerId,
-    )
+  const handleIsOpenEditModal = useCallback(
+    (customerId: number) => {
+      const customerToEdit = customers?.data?.find(
+        (customer: Customer) => customer.id === customerId,
+      )
 
-    if (customerToEdit) {
-      setSelectedCustomer(customerToEdit)
-      handleIsOpenEdit()
-    }
-  }
-
-  const ItemsContextMenu = (rowData: Customer) => [
-    {
-      label: 'Editar',
-      icon: () => <MdEdit className="h-4 w-4 fill-current" />,
-      onClick: () => handleIsOpenEditModal(rowData.id),
+      if (customerToEdit) {
+        setSelectedCustomer(customerToEdit)
+        handleIsOpenEdit()
+      }
     },
-  ]
+    [customers?.data, handleIsOpenEdit],
+  )
+
+  const ItemsContextMenu = useCallback(
+    (rowData: Customer) => [
+      {
+        label: 'Editar',
+        icon: () => <MdEdit className="h-4 w-4 fill-current" />,
+        onClick: () => handleIsOpenEditModal(rowData.id),
+      },
+    ],
+    [handleIsOpenEditModal],
+  )
 
   return (
-    <div className="flex flex-col mt-36 px-10 w-full">
+    <div className="flex flex-col py-20 px-10 w-full">
       <div className="flex flex-row justify-between">
         <h1 className="text-gray-300 font-mono font-medium tracking-wide ml-5 mt-1">
           Clientes:
@@ -93,11 +120,11 @@ export const CustomersView = ({ customers }: CustomersViewProps) => {
       </div>
 
       <DataTable
-        onPageChange={(page) => setPage(page)}
+        onPageChange={handlePageChange}
+        currentPage={currentPage}
         items={ItemsContextMenu}
         totalPages={totalPages}
         data={customers?.data}
-        currentPage={page}
         columns={columns}
         title="Clientes"
       />
