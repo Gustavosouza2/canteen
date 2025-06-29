@@ -11,3 +11,8 @@ export type CustomersResponse = {
   data: Customer[]
   count: number
 }
+
+export type CreateCustomerResponse = {
+  customer: Customer
+  status: number
+}

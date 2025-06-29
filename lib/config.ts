@@ -23,16 +23,10 @@ export const config = {
 } as const
 
 export function buildApiUrl(path: string): string {
-  const baseUrl = config.urls.base
+  const baseUrl = 'http://localhost:3000'
 
-  if (!baseUrl && typeof window !== 'undefined') {
-    return `${window.location.origin}${path}`
-  }
+  const cleanPath = path.startsWith('/') ? path : `/${path}`
+  const fullUrl = `${baseUrl}${cleanPath}`
 
-  if (baseUrl) {
-    const cleanPath = path.startsWith('/') ? path : `/${path}`
-    return `${baseUrl}${cleanPath}`
-  }
-
-  return `http://localhost:3000${path}`
+  return fullUrl
 }

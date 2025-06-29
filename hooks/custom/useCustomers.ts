@@ -1,7 +1,7 @@
 import { Customer, CustomersResponse } from '@/types/customer'
 import { serverFetch } from '@/lib/api'
 
-export const useCustomersList = async (
+export const getCustomersList = async (
   page: number,
   pageSize: number,
 ): Promise<CustomersResponse> => {
@@ -15,6 +15,7 @@ export const useCustomersList = async (
         },
         next: {
           tags: ['customers'],
+          revalidate: 300, // Cache for 5 minutes
         },
         cache: 'force-cache',
       },

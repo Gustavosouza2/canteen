@@ -9,13 +9,19 @@ export async function serverFetch<T>(
   const response = await fetch(apiUrl, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
       ...options?.headers,
     },
   })
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
+    const errorText = await response.text()
+    console.error('API Error:', {
+      status: response.status,
+      statusText: response.statusText,
+      url: apiUrl,
+      body: errorText,
+    })
+    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
   }
 
   return response.json()

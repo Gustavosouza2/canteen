@@ -15,6 +15,11 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/login', req.url))
     }
 
+    // Skip session verification for static assets and API routes
+    if (pathname.includes('/api/') || pathname.includes('/_next/')) {
+      return NextResponse.next()
+    }
+
     try {
       const supabase = await createSupabaseServerClient()
       const {
@@ -23,7 +28,6 @@ export async function middleware(req: NextRequest) {
       } = await supabase.auth.getSession()
 
       if (error || !session) {
-
         const response = NextResponse.redirect(new URL('/login', req.url))
         response.cookies.delete('token')
         response.cookies.delete('userData')
