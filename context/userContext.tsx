@@ -17,12 +17,15 @@ type UserContextProps = {
   userData: UserData | null
   handleLogout: () => void
   token: string | null
+  push: (path: string) => void
 }
+
 export const UserContext = createContext<UserContextProps>({
   handleLogout: () => {},
   handleLogin: () => {},
   userData: null,
   token: null,
+  push: () => {},
 })
 
 export const UserContextProvider: React.FC<{
@@ -63,12 +66,13 @@ export const UserContextProvider: React.FC<{
 
   const contextValue = useMemo(
     () => ({
+      push,
       token,
       userData,
       handleLogin,
       handleLogout,
     }),
-    [token, userData, handleLogin, handleLogout],
+    [token, userData, handleLogin, handleLogout, push],
   )
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>

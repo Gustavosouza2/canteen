@@ -1,15 +1,16 @@
 'use client'
 
 import { useState, useCallback, useMemo } from 'react'
-import { Button } from '@/components/ui/button'
 import { MdEdit } from 'react-icons/md'
 
-import { CreateCustomerModal } from '../create-customer'
 import { type Customer, type CustomersResponse } from '@/types/customer'
 import { DataTable } from '@/components/features/Table'
-import { EditCustomerModal } from '../edit-customer'
+import { useUserContext } from '@/context/userContext'
 import { PAGE_SIZE } from '@/constants/pageSize'
-import { useRouter } from 'next/router'
+import { Button } from '@/components/ui/button'
+
+import { CreateCustomerModal } from '../create-customer'
+import { EditCustomerModal } from '../edit-customer'
 
 type CustomersViewProps = {
   customers: CustomersResponse
@@ -21,14 +22,13 @@ export const CustomersView = ({
   currentPage,
 }: CustomersViewProps) => {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>()
-  const router = useRouter()
+  const { push } = useUserContext()
 
   const handlePageChange = useCallback(
-    // TODO: FIX THIS
     (page: number) => {
-      router.push(`/dashboard/customers?page=${page}`)
+      push(`/dashboard/customers?page=${page}`)
     },
-    [router],
+    [push],
   )
 
   const [isOpenCreate, setIsOpenCreate] = useState<boolean>(false)
