@@ -1,8 +1,9 @@
 'use client'
 
 import { MdVisibilityOff, MdContentCopy, MdDelete } from 'react-icons/md'
-import { useMemo, useRef, useState, type KeyboardEvent } from 'react'
+import { useMemo, useState, type KeyboardEvent } from 'react'
 import { useForm } from 'react-hook-form'
+import Image from 'next/image'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
 
@@ -33,7 +34,6 @@ export const CardMenu = ({
   onUpdateQuantity,
   onToggleAvailability,
 }: CardMenuProps) => {
-  const rootRef = useRef<HTMLDivElement>(null)
   const [isEditingPrice, setIsEditingPrice] = useState(false)
   const [tempPrice, setTempPrice] = useState(item.price.toString())
   const { register } = useForm()
@@ -87,7 +87,6 @@ export const CardMenu = ({
   return (
     <TooltipProvider>
       <div
-        ref={rootRef}
         className={`relative w-full h-full flex flex-wrap justify-center items-start gap-3 ${className}`}
       >
         <article
@@ -100,10 +99,12 @@ export const CardMenu = ({
 
           {/* Image Content */}
           <div className="relative  mb-4">
-            <img
+            <Image
+              width={100}
+              height={100}
               loading="lazy"
               alt={item.title}
-              src={item.image || '/placeholder.svg'}
+              src={item.image || 'https://placehold.co/600x400'}
               className="w-full h-48 object-cover rounded-[10px]"
             />
             {IsUnavailable && (
