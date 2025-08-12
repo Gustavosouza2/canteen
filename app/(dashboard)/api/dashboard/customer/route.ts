@@ -2,12 +2,15 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma/prisma'
 import { revalidateTag } from 'next/cache'
 
-export const dynamic = 'force-dynamic'
+// Allow Next.js to cache this route and revalidate using the 'customers' tag
+export const dynamic = 'auto'
 
-// ArcJet configuration - optional to prevent build failures
+// ArcJet configuration - lazy import to avoid top-level await slowing route init
 let arcJet: any = null
-try {
-  if (process.env.ARCJET_KEY) {
+async function getArcJet() {
+  if (!process.env.ARCJET_KEY) return null
+  if (arcJet) return arcJet
+  try {
     const { default: arcjet, shield } = await import('@arcjet/next')
     arcJet = arcjet({
       key: process.env.ARCJET_KEY,
@@ -17,16 +20,18 @@ try {
         }),
       ],
     })
+    return arcJet
+  } catch (error) {
+    console.warn('ArcJet not configured:', error)
+    return null
   }
-} catch (error) {
-  console.warn('ArcJet not configured:', error)
 }
 
 export async function GET(request: NextRequest) {
-  // Only use ArcJet if configured
-  if (arcJet) {
-    const decision = await arcJet.protect(request)
-
+  // Only use ArcJet if configured (lazy-load)
+  const arc = await getArcJet()
+  if (arc) {
+    const decision = await arc.protect(request)
     if (decision.isDenied()) {
       return NextResponse.json(
         { error: 'Unauthorized', reason: decision.reason },

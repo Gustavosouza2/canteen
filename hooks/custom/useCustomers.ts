@@ -17,7 +17,6 @@ export const getCustomersList = async (
           tags: ['customers'],
           revalidate: 300, // Cache for 5 minutes
         },
-        cache: 'force-cache',
       },
     )
 

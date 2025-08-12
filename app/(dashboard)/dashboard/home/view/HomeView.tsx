@@ -1,19 +1,31 @@
 'use client'
+import dynamic from 'next/dynamic'
 
 import { Card, type CardProps } from '@/components/features/Card'
-import { Chart } from '@/components/features/Chart'
-import { type User } from '@supabase/supabase-js'
+import { useUserContext } from '@/context/userContext'
 import { type Customer } from '@/types/customer'
 
 type HomeViewProps = {
   customers: { data: Customer[]; count: number }
-  user: User | null
 }
 
-export default function HomeView({ user, customers }: HomeViewProps) {
+const Chart = dynamic(
+  () => import('@/components/features/Chart').then((m) => m.Chart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-72 max-w-7xl">
+        <div className="w-full h-72 rounded-xl bg-[#0E0E10] border border-[#FFFA]/10" />
+      </div>
+    ),
+  },
+)
+
+export default function HomeView({ customers }: HomeViewProps) {
+  const { userData: userFromContext } = useUserContext()
   const userData = {
-    email: user?.email,
-    name: user?.email?.split('@')[0],
+    email: userFromContext?.email,
+    name: userFromContext?.userName,
   }
 
   const totalAmount =
@@ -53,23 +65,23 @@ export default function HomeView({ user, customers }: HomeViewProps) {
       <div className="w-full max-w-6xl">
         <div className="block md-mobile:hidden">
           <div className="mb-4">
-            <Card data={[cardItems[0]]} isLoading={false} key={user?.id} />
+            <Card data={[cardItems[0]]} isLoading={false} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-1">
-              <Card data={[cardItems[1]]} isLoading={false} key={user?.id} />
+              <Card data={[cardItems[1]]} isLoading={false} />
             </div>
 
             <div className="md:col-span-1">
-              <Card data={[cardItems[2]]} isLoading={false} key={user?.id} />
+              <Card data={[cardItems[2]]} isLoading={false} />
             </div>
           </div>
         </div>
 
         <div className="hidden md-mobile:block">
           <div className="grid grid-cols-3 gap-4">
-            <Card data={cardItems} isLoading={false} key={user?.id} />
+            <Card data={cardItems} isLoading={false} />
           </div>
         </div>
       </div>
