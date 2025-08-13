@@ -16,6 +16,7 @@ import { Button } from '../../ui/button'
 
 export const Input = ({
   showPasswordTips,
+  onChangeCurrency,
   onValueChange,
   placeholder,
   register,
@@ -57,7 +58,15 @@ export const Input = ({
           focus:outline-none focus-visible:outline-none"
             intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
             placeholder={placeholder}
-            {...register('amount')}
+            name={props.name}
+            value={
+              typeof props.value === 'number'
+                ? String(props.value)
+                : (props.value as string | undefined)
+            }
+            onValueChange={(value, name, values) => {
+              onChangeCurrency?.(value ?? '', name, values)
+            }}
             allowDecimals={true}
             decimalSeparator=","
             groupSeparator="."
@@ -66,7 +75,10 @@ export const Input = ({
         )}
 
         {type === 'select' && (
-          <Select onValueChange={onValueChange}>
+          <Select
+            value={(props.value as string | undefined) ?? undefined}
+            onValueChange={onValueChange}
+          >
             <SelectTrigger
               className="w-full rounded h-10 text-zinc-200
               ring-0 focus:ring-0

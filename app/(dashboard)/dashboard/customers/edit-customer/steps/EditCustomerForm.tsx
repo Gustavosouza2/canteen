@@ -1,7 +1,8 @@
-import { SetStateAction, Dispatch, useState } from 'react'
-import { UseFormRegister, useForm } from 'react-hook-form'
+import { type SetStateAction, type Dispatch, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@/hooks/ui/use-toast'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
 import {
   FormControl,
   FormMessage,
@@ -10,48 +11,35 @@ import {
   FormItem,
   Form,
 } from '@/components/ui/form'
-import axios from 'axios'
 
-import { CreateCustomerSchema } from '../../create-customer/schema'
-import { useUserContext } from '@/context/userContext'
+import { updateCustomerServer } from '@/server-actions/customers/update-customers'
 import { Button } from '@/components/features/Button'
 import { Input } from '@/components/features/Input'
-import { Customer } from '@/types/customer'
-import { StepKey } from '..'
+import { type Customer } from '@/types/customer'
+
+import { type StepKey } from '..'
+import { EditCustomerSchema } from '../schema'
 
 type EditCustomerFormProps = {
   setCurrentStep: Dispatch<SetStateAction<StepKey>>
   customer: Customer
 }
 
-type InputsProps = Array<{
-  type: 'email' | 'password' | 'select' | 'currency'
-  name: 'amount' | 'status'
-  options?: Array<{
-    label: string
-    value: string
-    id: number
-  }>
-  register: UseFormRegister<any>
-  placeholder: string
-  label: string
-  id: number
-}>
-
 export const EditCustomerForm = ({
   setCurrentStep,
   customer,
 }: EditCustomerFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { token } = useUserContext()
+  const { refresh } = useRouter()
 
   const { toast } = useToast()
 
   const form = useForm({
-    defaultValues: { amount: '', status: '' },
-    resolver: zodResolver(CreateCustomerSchema),
-    shouldUnregister: true,
+    resolver: zodResolver(EditCustomerSchema),
+    defaultValues: { amount: customer?.amount, status: customer?.status },
   })
+
+  const { isValid } = form.formState
 
   const selectOptions = [
     { label: 'Pagar Depois', value: 'pending', id: 1 },
@@ -67,15 +55,9 @@ export const EditCustomerForm = ({
     formData.append('id', customer?.id.toString() ?? '')
 
     try {
-      await axios.patch('/api/dashboard/customer', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
+      await updateCustomerServer(formData)
+      refresh()
       setCurrentStep(1)
-      // Refresh the page to get updated data
-      window.location.reload()
     } catch (error) {
       toast({
         title: 'Algo deu errado!',
@@ -88,61 +70,65 @@ export const EditCustomerForm = ({
     }
   }
 
-  const inputs: InputsProps = [
-    {
-      placeholder: 'Status da compra:',
-      options: selectOptions,
-      register: form.register,
-      label: 'Status:',
-      name: 'status',
-      type: 'select',
-      id: 3,
-    },
-    {
-      placeholder: 'Valor da compra',
-      register: form.register,
-      type: 'currency',
-      label: 'Valor:',
-      name: 'amount',
-      id: 4,
-    },
-  ]
-
   return (
     <Form {...form}>
-      <form>
-        {inputs.map((input) => (
-          <FormField
-            key={input.id}
-            name={input.name}
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="w-full gap-1 mt-2">
-                <FormLabel
-                  className="text-[#A1A1AA] font-sans tracking-wider font-semibold"
-                  htmlFor={input.name}
-                >
-                  {input.label}
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    onChangeCurrency={field.onChange}
-                    placeholder={input.placeholder}
-                    onValueChange={field.onChange}
-                    register={input.register}
-                    options={input.options}
-                    type={input.type}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-500" />
-              </FormItem>
-            )}
-          />
-        ))}
+      <form action={onSubmit}>
+        <FormField
+          name="status"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="w-full gap-1 mt-2">
+              <FormLabel
+                className="text-[#A1A1AA] font-sans tracking-wider font-semibold"
+                htmlFor="status"
+              >
+                Status:
+              </FormLabel>
+              <FormControl>
+                <Input
+                  onChangeCurrency={field.onChange}
+                  placeholder="Status da compra:"
+                  onValueChange={field.onChange}
+                  defaultValue={form.getValues('status')}
+                  register={form.register}
+                  options={selectOptions}
+                  type="select"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="amount"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="w-full gap-1 mt-2">
+              <FormLabel
+                className="text-[#A1A1AA] font-sans tracking-wider font-semibold"
+                htmlFor="amount"
+              >
+                Valor:
+              </FormLabel>
+              <FormControl>
+                <Input
+                  defaultValue={customer?.amount.toString()}
+                  onChangeCurrency={field.onChange}
+                  placeholder="Valor da compra"
+                  register={form.register}
+                  type="currency"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className="text-red-500" />
+            </FormItem>
+          )}
+        />
 
         <div className="mt-52 flex-wrap flex">
-          <Button type="submit" onClick={onSubmit} isLoading={isLoading}>
+          <Button type="submit" isLoading={isLoading} disabled={!isValid}>
             {isLoading ? 'ENVIANDO...' : 'ENVIAR'}
           </Button>
         </div>

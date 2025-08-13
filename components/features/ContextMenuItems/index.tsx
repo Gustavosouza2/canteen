@@ -16,14 +16,14 @@ export const ContextMenuItems = ({ items }: ContextMenuItemsProps) => {
       <DropdownMenuTrigger>
         <VscKebabVertical className="w-5 h-5 flex items-center" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex items-center gap-3 flex-col bg-[#09090b] rounded">
+      <DropdownMenuContent className="flex items-center justify-center gap-1.5 flex-col bg-[#09090b] rounded overflow-hidden p-0">
         {items.map((item) => (
           <DropdownMenuItem
             key={item.label}
             onClick={item.onClick}
-            className="flex items-center gap-2 focus:outline-none hover:bg-zinc-900 w-full cursor-pointer"
+            className="w-full flex items-center gap-2 px-3 py-2 focus:outline-none hover:bg-zinc-900 cursor-pointer"
           >
-            <div className="w-5 h-5 flex items-center ml-3">{item.icon()}</div>
+            <div className="w-5 h-5 flex items-center">{item.icon()}</div>
             <span className="text-sm font-mono font-medium text-zinc-300">
               {item.label}
             </span>

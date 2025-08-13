@@ -16,3 +16,10 @@ export type CreateCustomerResponse = {
   customer: Customer
   status: number
 }
+
+export type UpdateCustomerRequest = Pick<Customer, 'id' | 'amount' | 'status'>
+
+export type UpdateCustomerResponse = Pick<
+  CreateCustomerResponse,
+  'status' | 'customer'
+>

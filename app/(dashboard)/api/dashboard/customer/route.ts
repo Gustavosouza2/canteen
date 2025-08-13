@@ -2,10 +2,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma/prisma'
 import { revalidateTag } from 'next/cache'
 
-// Allow Next.js to cache this route and revalidate using the 'customers' tag
 export const dynamic = 'auto'
 
-// ArcJet configuration - lazy import to avoid top-level await slowing route init
 let arcJet: any = null
 async function getArcJet() {
   if (!process.env.ARCJET_KEY) return null
@@ -28,7 +26,6 @@ async function getArcJet() {
 }
 
 export async function GET(request: NextRequest) {
-  // Only use ArcJet if configured (lazy-load)
   const arc = await getArcJet()
   if (arc) {
     const decision = await arc.protect(request)
@@ -159,7 +156,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 })
     }
 
-    // Invalidate cache after updating a customer
+    // Invalidate cached customers data after an update
     revalidateTag('customers')
 
     return NextResponse.json(updatedUser)

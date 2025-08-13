@@ -65,7 +65,7 @@ export const DataTable = React.memo(
                         </TableRow>
                       </TableHeader>
                       <TableBody className="w-full">
-                        {data.map(({ onClickRow, ...data }, dataIndex) => (
+                        {data.map(({ ...data }, dataIndex) => (
                           <TableRow
                             key={`tr-${dataIndex}`}
                             className="border-b w-full border-[#FFFA]/10 hover:bg-[#FFFA]/5 transition-colors"
@@ -74,7 +74,6 @@ export const DataTable = React.memo(
                               <TableCell
                                 className={`w-${column.size}`}
                                 key={`tr-${columnIndex}`}
-                                onClick={onClickRow}
                               >
                                 {parsedDataTable(
                                   items,

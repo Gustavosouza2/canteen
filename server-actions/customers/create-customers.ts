@@ -1,6 +1,7 @@
+import { revalidateTag } from 'next/cache'
+
 import { type CreateCustomerResponse } from '@/types/customer'
 import { serverFetch } from '@/lib/api'
-import { revalidateTag } from 'next/cache'
 
 export async function createCustomerServer(formData: FormData) {
   const response = await serverFetch<CreateCustomerResponse>(

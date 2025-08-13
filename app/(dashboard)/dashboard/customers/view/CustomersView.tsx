@@ -38,10 +38,6 @@ export const CustomersView = ({
   )
 
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false)
-  const handleIsOpenEdit = useCallback(
-    () => setIsOpenEdit(!isOpenEdit),
-    [isOpenEdit],
-  )
 
   const totalPages = useMemo(
     () =>
@@ -71,11 +67,18 @@ export const CustomersView = ({
 
       if (customerToEdit) {
         setSelectedCustomer(customerToEdit)
-        handleIsOpenEdit()
+        setIsOpenEdit(!isOpenEdit)
       }
     },
-    [customers?.data, handleIsOpenEdit],
+    [customers?.data, isOpenEdit],
   )
+
+  const formattedCustomersData = useMemo(() => {
+    return customers?.data?.map((customer) => ({
+      ...customer,
+      onClickRow: () => handleIsOpenEditModal(customer.id),
+    }))
+  }, [customers?.data, handleIsOpenEditModal])
 
   const ItemsContextMenu = useCallback(
     (rowData: Customer) => [
@@ -114,17 +117,17 @@ export const CustomersView = ({
       <div>
         <EditCustomerModal
           isOpen={isOpenEdit}
-          onClose={handleIsOpenEdit}
           customer={selectedCustomer as Customer}
+          onClose={() => setIsOpenEdit(!isOpenEdit)}
         />
       </div>
 
       <DataTable
         onPageChange={handlePageChange}
+        data={formattedCustomersData}
         currentPage={currentPage}
         items={ItemsContextMenu}
         totalPages={totalPages}
-        data={customers?.data}
         columns={columns}
         title="Clientes"
       />

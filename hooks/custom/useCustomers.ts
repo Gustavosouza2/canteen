@@ -1,4 +1,4 @@
-import { Customer, CustomersResponse } from '@/types/customer'
+import { type Customer, type CustomersResponse } from '@/types/customer'
 import { serverFetch } from '@/lib/api'
 
 export const getCustomersList = async (

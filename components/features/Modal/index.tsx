@@ -24,7 +24,7 @@ export const Modal = ({
 }: ModalProps) => {
   return (
     <Dialog modal onOpenChange={onClose} open={isOpen} defaultOpen={isOpen}>
-      <DialogContent className="h-full w-full md:max-w-[30rem] md:max-h-[40rem] flex flex-col bg-zinc-950 rounded p-10">
+      <DialogContent className="md:max-w-[30rem] md:max-h-[40rem] flex flex-col bg-zinc-950 rounded p-10">
         <DialogHeader>
           <div className="flex flex-col mt-5 gap-2 justify-center items-center">
             <DialogTitle className="text-[1.775rem] font-mono font-bold">
