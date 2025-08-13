@@ -1,4 +1,6 @@
 'use client'
+import Link from 'next/link'
+import Image from 'next/image'
 
 import { CollapsibleTrigger, Collapsible } from '@/components/ui/collapsible'
 import {
@@ -8,8 +10,6 @@ import {
   SidebarGroup,
   SidebarMenu,
 } from '@/components/ui/sidebar'
-import Image from 'next/image'
-import Link from 'next/link'
 
 import Logo from '../../../assets/images/logo.png'
 
@@ -45,7 +45,7 @@ export function NavMain({
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton>
-                  <Link href={item.url}>
+                  <Link href={item.url} prefetch className="cursor-pointer">
                     <div className="flex justify-between items-center gap-2">
                       {item.icon && <item.icon />}
                       <span className="text-[0.9rem] font-mono text-zinc-300">
